@@ -18,7 +18,7 @@ abstract class UserApiClient {
   @POST('/token/refresh')
   Future<HttpResponse> refreshToken();
 
-  @POST('/validate-token')
+  @GET('/validate-token')
   Future<HttpResponse> validateToken();
 
   @POST('/logout')

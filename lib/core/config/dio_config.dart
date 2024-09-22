@@ -17,6 +17,9 @@ class DioConfig {
         headers: {
           'Content-Type': 'application/json',
         },
+        extra: {
+          'withCredentials': true,
+        },
       ),
     );
 
