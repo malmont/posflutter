@@ -22,10 +22,10 @@ JWT (JSON Web Token) pour une authentification sécurisée. Le backend Symfony g
 Ce token est ensuite utilisé pour authentifier les requêtes suivantes en l’ajoutant aux en-têtes HTTP (via Dio) pour toutes les requêtes sécurisées.
 Les jetons JWT permettent de valider l'identité de l'utilisateur tout au long de la session sans stocker d'informations sensibles côté client.
 * **Workflow JWT**:
-L'utilisateur se connecte avec ses identifiants.
-Le backend Symfony génère un token JWT.
-Ce token est stocké localement (généralement dans Secure Storage ou SharedPreferences).
-Pour chaque requête ultérieure, Dio ajoute automatiquement le token JWT dans les en-têtes pour authentifier l'utilisateur. 
+L'utilisateur se connecte avec ses identifiants. Le backend Symfony génère un token JWT. Ce token est stocké localement (généralement dans Secure Storage ou SharedPreferences pour les applications mobiles). Pour chaque requête ultérieure, Dio ajoute automatiquement le token JWT dans les en-têtes pour authentifier l'utilisateur.
+
+Pour les applications web, la gestion du token est différente : le token JWT est géré côté backend et inséré dans le navigateur sous forme de cookies sécurisés (Secure Cookies). Cela permet de protéger le token en le rendant accessible uniquement au serveur pour les requêtes authentifiées via le navigateur. Cette gestion centralisée assure une sécurité accrue et évite les manipulations directes du token dans le frontend des applications web. 
+
 * **Fonctionnalités POS de commerce**: Gestion des produits, catégories, panier, et suivi des stocks.
 * **Gestion de la caisse**: Gestion de l'ouverture, fermeture, et des dépôts en caisse avec un historique complet des actions.
 <!-- Features -->
