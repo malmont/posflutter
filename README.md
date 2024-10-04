@@ -56,7 +56,7 @@ Suivez ces étapes pour configurer votre environnement de développement et exé
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/Sameera-Perera/Flutter-TDD-Clean-Architecture-E-Commerce-App.git
+   git clone https://github.com/malmont/posflutter.git
    ```
 2. Install packages
    ```sh

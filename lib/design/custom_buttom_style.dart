@@ -81,7 +81,7 @@ class CustomButtonStyle {
 
   static ButtonStyle customButtonStyle({
     required ButtonType type,
-    required bool isSelected, // Ajout de isSelected pour gérer l'état de sélection
+    required bool isSelected,
   }) {
     WidgetStateProperty<Color>? backgroundColor;
     WidgetStateProperty<Color>? foregroundColor;
@@ -102,8 +102,7 @@ class CustomButtonStyle {
         break;
     }
     return ButtonStyle(
-      padding:
-          WidgetStateProperty.all<EdgeInsetsGeometry>(paddingIconSmall),
+      padding: WidgetStateProperty.all<EdgeInsetsGeometry>(paddingIconSmall),
       shape: WidgetStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Units.radiusXXLarge),
@@ -115,4 +114,3 @@ class CustomButtonStyle {
     );
   }
 }
-
