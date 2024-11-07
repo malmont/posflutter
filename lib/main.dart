@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CaisseBloc>(
           create: (context) =>
-              getIt<CaisseBloc>()..add(const GetCaisse(days: 15)),
+              getIt<CaisseBloc>()..add(const GetCaisse(days: 1)),
         ),
         BlocProvider(
           create: (context) => getIt<ProductBloc>()

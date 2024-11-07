@@ -19,9 +19,9 @@ class CaisseListPage extends StatefulWidget {
 
 int selectedDayIndex = 0;
 final List<DaySelection> daySelections = [
+  DaySelection(name: "1 jours", days: 1),
   DaySelection(name: "10 jours", days: 10),
   DaySelection(name: "20 jours", days: 20),
-  DaySelection(name: "30 jours", days: 30),
   DaySelection(name: "2 mois", days: 60),
   DaySelection(name: "6 mois", days: 180),
 ];
@@ -73,44 +73,54 @@ class _CaisseListPageState extends State<CaisseListPage> {
               padding: const EdgeInsets.all(Units.edgeInsetsLarge),
               height: double.infinity,
               color: Colours.primary100,
-              child: ListView.builder(
-                itemCount: widget.caisses.length,
-                itemBuilder: (context, index) {
-                  final caisse = widget.caisses[index];
-                  return GestureDetector(
-                    onTap: () {
-                      widget.onSelectCaisse(caisse);
-                    },
-                    child: Card(
-                      color: Colours.primaryPalette,
-                      elevation: 5,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: Units.edgeInsetsLarge,
-                          horizontal: Units.edgeInsetsXXLarge),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildHeaderRow(caisse),
-                            const SizedBox(width: Units.sizedbox_80),
-                            _buildDetailsRow(
-                                'Montant Total',
-                                '\$${(caisse.amountTotal / 100).toStringAsFixed(2)}',
-                                Colors.greenAccent),
-                            const SizedBox(width: Units.sizedbox_80),
-                            _buildDetailsRow('Date de création',
-                                caisse.createdAt, Colors.grey),
-                          ],
+              child: widget.caisses.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Pas de caisse ouverte aujourd\'hui',
+                        style: TextStyles.interRegularH5.copyWith(
+                          color: Colours.colorsButtonMenu,
                         ),
                       ),
+                    )
+                  : ListView.builder(
+                      itemCount: widget.caisses.length,
+                      itemBuilder: (context, index) {
+                        final caisse = widget.caisses[index];
+                        return GestureDetector(
+                          onTap: () {
+                            widget.onSelectCaisse(caisse);
+                          },
+                          child: Card(
+                            color: Colours.primaryPalette,
+                            elevation: 5,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: Units.edgeInsetsLarge,
+                                horizontal: Units.edgeInsetsXXLarge),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.all(Units.edgeInsetsXXLarge),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildHeaderRow(caisse),
+                                  const SizedBox(width: Units.sizedbox_80),
+                                  _buildDetailsRow(
+                                      'Montant Total',
+                                      '\$${(caisse.amountTotal / 100).toStringAsFixed(2)}',
+                                      Colors.greenAccent),
+                                  const SizedBox(width: Units.sizedbox_80),
+                                  _buildDetailsRow('Date de création',
+                                      caisse.createdAt, Colors.grey),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:pos_flutter/features/authentification/infrastucture/models/delivery_info_model.dart';
 import 'package:pos_flutter/features/order/domain/entities/order_details.dart';
 import 'order_item_model.dart';
 
@@ -7,9 +8,30 @@ List<OrderDetailsModel> orderDetailsModelListFromJson(String str) =>
     List<OrderDetailsModel>.from(
         json.decode(str).map((x) => OrderDetailsModel.fromJson(x)));
 
-List<OrderDetailsModel> orderDetailsModelListFromLocalJson(String str) =>
-    List<OrderDetailsModel>.from(
-        json.decode(str).map((x) => OrderDetailsModel.fromJson(x)));
+List<OrderDetailsModel> orderDetailsModelListFromLocalJson(String str) {
+  try {
+    final jsonList = json.decode(str);
+
+    // Affiche le contenu JSON décodé pour vérifier sa structure
+    print('Contenu JSON décodé : $jsonList');
+
+    if (jsonList is List) {
+      return jsonList
+          .where((element) {
+            // Imprime chaque élément et son type pour débogage
+            print('Élément : $element, Type : ${element.runtimeType}');
+            return element is Map<String, dynamic>;
+          })
+          .map((x) => OrderDetailsModel.fromJson(x))
+          .toList();
+    } else {
+      throw FormatException("Le JSON fourni n'est pas une liste valide.");
+    }
+  } catch (e) {
+    print('Erreur lors du traitement du JSON : $e');
+    rethrow; // Relance l'exception pour ne pas interrompre le flux de contrôle
+  }
+}
 
 OrderDetailsModel orderDetailsModelFromJson(String str) =>
     OrderDetailsModel.fromJson(json.decode(str));
@@ -30,8 +52,9 @@ class OrderDetailsModel extends OrderDetails {
     required num totalAmount,
     required String orderDate,
     required int userId,
-    required int shippingAdress,
+    required DeliveryInfoModel shippingAdress,
     required String orderSource,
+    required String status,
     required List<OrderItemModel> orderItems,
   }) : super(
           id: id,
@@ -41,30 +64,50 @@ class OrderDetailsModel extends OrderDetails {
           userId: userId,
           shippingAdress: shippingAdress,
           orderSource: orderSource,
+          status: status,
           orderItems: orderItems,
         );
 
-  factory OrderDetailsModel.fromJson(Map<String, dynamic> json) =>
-      OrderDetailsModel(
-        id: json["id"],
-        reference: json["reference"],
-        totalAmount: json["totalAmount"],
-        orderDate: json["orderDate"],
-        userId: json["userId"],
-        shippingAdress: json["shippingAdress"],
-        orderSource: json["orderSource"],
-        orderItems: List<OrderItemModel>.from(
-            json["orderItems"].map((x) => OrderItemModel.fromJson(x))),
-      );
-
+  factory OrderDetailsModel.fromJson(Map<String, dynamic> json) {
+    return OrderDetailsModel(
+      id: json["id"] ?? 0,
+      reference: json["reference"] ?? '',
+      totalAmount: json["totalAmount"] ?? 0,
+      orderDate: json["orderDate"] ?? '',
+      userId: json["userId"] ?? 0,
+      shippingAdress: json["shippingAdress"] is Map<String, dynamic>
+          ? DeliveryInfoModel.fromJson(json["shippingAdress"])
+          : DeliveryInfoModel(
+              id: json["shippingAdress"]?.toString() ??
+                  '', // Utilise l'ID ou une valeur par défaut
+              firstName: '',
+              lastName: '',
+              fullname: '',
+              company: '',
+              addressLineOne: '',
+              addressLineTwo: '',
+              city: '',
+              zipCode: '',
+              contactNumber: '',
+              country: '',
+            ),
+      orderSource: json["orderSource"] ?? '',
+      status: json["status"] ?? '',
+      orderItems: json["orderItems"] != null
+          ? List<OrderItemModel>.from(
+              json["orderItems"].map((x) => OrderItemModel.fromJson(x)))
+          : [],
+    );
+  }
   Map<String, dynamic> toJson() => {
         "id": id,
         "reference": reference,
         "totalAmount": totalAmount,
         "orderDate": orderDate,
         "userId": userId,
-        "shippingAdress": shippingAdress,
+        "shippingAdress": shippingAdress.toJson(),
         "orderSource": orderSource,
+        "status": status,
         "orderItems": List<dynamic>.from(
             (orderItems as List<OrderItemModel>).map((x) => x.toJson())),
       };
@@ -75,22 +118,25 @@ class OrderDetailsModel extends OrderDetails {
         "totalAmount": totalAmount,
         "orderDate": orderDate,
         "userId": userId,
-        "shippingAdress": shippingAdress,
+        "shippingAdress": shippingAdress.toJson(),
         "orderSource": orderSource,
+        "status": status,
         "orderItems": List<dynamic>.from(
             (orderItems as List<OrderItemModel>).map((x) => x.toJsonBody())),
       };
 
   factory OrderDetailsModel.fromEntity(OrderDetails entity) =>
       OrderDetailsModel(
-          id: entity.id,
-          reference: entity.reference,
-          totalAmount: entity.totalAmount,
-          orderDate: entity.orderDate,
-          userId: entity.userId,
-          shippingAdress: entity.shippingAdress,
-          orderSource: entity.orderSource,
-          orderItems: entity.orderItems
-              .map((orderItem) => OrderItemModel.fromEntity(orderItem))
-              .toList());
+        id: entity.id,
+        reference: entity.reference,
+        totalAmount: entity.totalAmount,
+        orderDate: entity.orderDate,
+        userId: entity.userId,
+        shippingAdress: DeliveryInfoModel.fromEntity(entity.shippingAdress),
+        orderSource: entity.orderSource,
+        status: entity.status,
+        orderItems: entity.orderItems
+            .map((orderItem) => OrderItemModel.fromEntity(orderItem))
+            .toList(),
+      );
 }

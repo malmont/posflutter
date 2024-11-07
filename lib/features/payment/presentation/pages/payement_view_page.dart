@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pos_flutter/features/payment/presentation/widgets/payments_list_page_view.dart';
 
 import '../../application/blocs/payment_bloc.dart';
@@ -18,9 +19,10 @@ class _PaymentViewPageState extends State<PaymentViewPage> {
       body: BlocBuilder<PaymentBloc, PaymentState>(
         builder: (context, state) {
           if (state is PaymentFetchLoading) {
-            return const Center(child: CircularProgressIndicator());
+            EasyLoading.show(status: 'Chargement...');
+          } else {
+            EasyLoading.dismiss();
           }
-
           if (state is PaymentFetchSuccess) {
             return PaymentsListPage(
               payments: state.payments,
@@ -31,7 +33,6 @@ class _PaymentViewPageState extends State<PaymentViewPage> {
               },
             );
           }
-
           if (state is PaymentFecthFail) {
             return Center(
               child: Text('Failed to load payments: ${state.failure}'),

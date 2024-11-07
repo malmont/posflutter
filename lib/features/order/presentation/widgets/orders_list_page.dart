@@ -21,9 +21,9 @@ class OrdersListPage extends StatefulWidget {
 int selectedDayIndex = 0;
 
 final List<DaySelection> daySelections = [
+  DaySelection(name: "1 jours", days: 1),
   DaySelection(name: "10 jours", days: 10),
   DaySelection(name: "20 jours", days: 20),
-  DaySelection(name: "30 jours", days: 30),
   DaySelection(name: "2 mois", days: 60),
   DaySelection(name: "6 mois", days: 180),
 ];
@@ -112,46 +112,56 @@ class _OrdersListPageState extends State<OrdersListPage> {
             child: Container(
               height: double.infinity,
               color: Colours.primary100,
-              child: ListView.builder(
-                itemCount: widget.orders.length,
-                itemBuilder: (context, index) {
-                  final order = widget.orders[index];
-                  return GestureDetector(
-                    onTap: () {
-                      widget.onSelectOrder(order);
-                    },
-                    child: Card(
-                      color: Colours.primaryPalette,
-                      elevation: 5,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: Units.edgeInsetsLarge,
-                          horizontal: Units.edgeInsetsXXLarge),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildHeaderRow(order),
-                            const SizedBox(width: Units.sizedbox_80),
-                            _buildDetailsRow(
-                                'Total Amount',
-                                '\$${(order.totalAmount / 100).toStringAsFixed(2)}',
-                                Colors.greenAccent),
-                            const SizedBox(width: Units.sizedbox_80),
-                            _buildDetailsRow(
-                                'Order Date', order.orderDate, Colors.grey),
-                            const SizedBox(width: Units.sizedbox_80),
-                            _buildStatusRow(order),
-                          ],
+              child: widget.orders.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Pas de commandes aujourd\'hui',
+                        style: TextStyles.interRegularH5.copyWith(
+                          color: Colours.colorsButtonMenu,
                         ),
                       ),
+                    )
+                  : ListView.builder(
+                      itemCount: widget.orders.length,
+                      itemBuilder: (context, index) {
+                        final order = widget.orders[index];
+                        return GestureDetector(
+                          onTap: () {
+                            widget.onSelectOrder(order);
+                          },
+                          child: Card(
+                            color: Colours.primaryPalette,
+                            elevation: 5,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: Units.edgeInsetsLarge,
+                                horizontal: Units.edgeInsetsXXLarge),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.all(Units.edgeInsetsXXLarge),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildHeaderRow(order),
+                                  const SizedBox(width: Units.sizedbox_80),
+                                  _buildDetailsRow(
+                                      'Total Amount',
+                                      '\$${(order.totalAmount / 100).toStringAsFixed(2)}',
+                                      Colors.greenAccent),
+                                  const SizedBox(width: Units.sizedbox_80),
+                                  _buildDetailsRow('Order Date',
+                                      order.orderDate, Colors.grey),
+                                  const SizedBox(width: Units.sizedbox_80),
+                                  _buildStatusRow(order),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ),
         ],
@@ -209,11 +219,11 @@ class _OrdersListPageState extends State<OrdersListPage> {
               vertical: Units.edgeInsetsMedium,
               horizontal: Units.edgeInsetsXLarge),
           decoration: BoxDecoration(
-            color: _getStatusColor('Completed'),
+            color: _getStatusColor(order.status),
             borderRadius: BorderRadius.circular(Units.radiusXXLarge),
           ),
           child: Text(
-            'Completed',
+            order.status,
             style: TextStyles.interRegularBody1.copyWith(color: Colors.white),
           ),
         ),
@@ -223,12 +233,18 @@ class _OrdersListPageState extends State<OrdersListPage> {
 
   Color _getStatusColor(String status) {
     switch (status) {
-      case 'Completed':
+      case 'Complétée':
         return Colors.green;
-      case 'Pending':
+      case 'En cours':
         return Colors.orange;
-      case 'Preparing':
+      case 'En cours de préparation':
         return Colors.purple;
+      case 'En cours de livraison':
+        return Colors.blueAccent;
+      case 'Livrée':
+        return Colors.greenAccent;
+      case 'Annulation':
+        return Colors.red;
       default:
         return Colors.grey;
     }

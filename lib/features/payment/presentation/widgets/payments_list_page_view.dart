@@ -25,9 +25,9 @@ class PaymentsListPage extends StatefulWidget {
 int selectedDayIndex = 0;
 
 final List<DaySelection> daySelections = [
+  DaySelection(name: "1 jours", days: 1),
   DaySelection(name: "10 jours", days: 10),
   DaySelection(name: "20 jours", days: 20),
-  DaySelection(name: "30 jours", days: 30),
   DaySelection(name: "2 mois", days: 60),
   DaySelection(name: "6 mois", days: 180),
 ];
@@ -101,48 +101,59 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
           ),
           // Displaying the payments list
           Expanded(
-            child: ListView.builder(
-              itemCount: widget.payments.length,
-              itemBuilder: (context, index) {
-                final payment = widget.payments[index];
-                return GestureDetector(
-                  onTap: () {
-                    widget.onSelectPayment(payment);
-                  },
-                  child: Card(
-                    color: Colours.primaryPalette,
-                    elevation: 5,
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buildHeaderRow(payment),
-                          const SizedBox(width: 20),
-                          _buildDetailsRow(
-                              'Amount',
-                              '\$${(payment.amount / 100).toStringAsFixed(2)}',
-                              Colors.greenAccent),
-                          const SizedBox(width: 20),
-                          _buildDetailsRow('Date',
-                              payment.paymentDate.toString(), Colors.grey),
-                          const SizedBox(width: 20),
-                          _buildDetailsRow('TypePayment', payment.paymentMethod,
-                              Colors.grey),
-                          const SizedBox(width: 20),
-                          _buildStatusRow(payment),
-                        ],
+            child: widget.payments.isEmpty
+                ? Center(
+                    child: Text(
+                      'Pas de paiement aujourd\'hui',
+                      style: TextStyles.interRegularH5.copyWith(
+                        color: Colours.colorsButtonMenu,
                       ),
                     ),
+                  )
+                : ListView.builder(
+                    itemCount: widget.payments.length,
+                    itemBuilder: (context, index) {
+                      final payment = widget.payments[index];
+                      return GestureDetector(
+                        onTap: () {
+                          widget.onSelectPayment(payment);
+                        },
+                        child: Card(
+                          color: Colours.primaryPalette,
+                          elevation: 5,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildHeaderRow(payment),
+                                const SizedBox(width: 20),
+                                _buildDetailsRow(
+                                    'Amount',
+                                    '\$${(payment.amount / 100).toStringAsFixed(2)}',
+                                    Colors.greenAccent),
+                                const SizedBox(width: 20),
+                                _buildDetailsRow(
+                                    'Date',
+                                    payment.paymentDate.toString(),
+                                    Colors.grey),
+                                const SizedBox(width: 20),
+                                _buildDetailsRow('TypePayment',
+                                    payment.paymentMethod, Colors.grey),
+                                const SizedBox(width: 20),
+                                _buildStatusRow(payment),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),

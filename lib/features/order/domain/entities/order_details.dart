@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:pos_flutter/features/authentification/domain/entities/delivery_info.dart';
 
 import 'order_item.dart';
 
@@ -8,8 +9,9 @@ class OrderDetails extends Equatable {
   final num totalAmount;
   final String orderDate;
   final int userId;
-  final int shippingAdress;
+  final DeliveryInfo shippingAdress;
   final String orderSource;
+  final String status;
   final List<OrderItem> orderItems;
 
   const OrderDetails({
@@ -20,6 +22,7 @@ class OrderDetails extends Equatable {
     required this.userId,
     required this.shippingAdress,
     required this.orderSource,
+    required this.status,
     required this.orderItems,
   });
 
@@ -32,6 +35,7 @@ class OrderDetails extends Equatable {
         userId,
         shippingAdress,
         orderSource,
+        status,
         orderItems,
       ];
 }
