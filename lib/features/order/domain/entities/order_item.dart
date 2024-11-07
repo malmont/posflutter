@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'package:equatable/equatable.dart';
+
 class OrderItem extends Equatable {
   final int id;
   final int quantity;
@@ -7,6 +9,8 @@ class OrderItem extends Equatable {
   final num totalPrice;
   final int productId;
   final String productVariantName;
+  final String productVariantColor;
+  final String productVariantSize;
   final String productImage;
 
   const OrderItem({
@@ -16,6 +20,8 @@ class OrderItem extends Equatable {
     required this.totalPrice,
     required this.productId,
     required this.productVariantName,
+    required this.productVariantColor,
+    required this.productVariantSize,
     required this.productImage,
   });
 
@@ -27,6 +33,8 @@ class OrderItem extends Equatable {
         totalPrice,
         productId,
         productVariantName,
+        productVariantColor,
+        productVariantSize,
         productImage,
       ];
 }

@@ -49,18 +49,12 @@ class _CaisseViewState extends State<CaisseView> {
                       if (state is CaisseLoading) {
                         EasyLoading.show(status: 'Chargement...');
                         return const Center(child: CircularProgressIndicator());
-                      } else if (state is CaisseSuccess &&
-                          state.caisses.isNotEmpty) {
+                      } else if (state is CaisseSuccess) {
                         EasyLoading.dismiss();
                         return CaisseListPage(
                           caisses: state.caisses,
                           onSelectCaisse: navigateToDetails,
                         );
-                      } else if (state is CaisseSuccess &&
-                          state.caisses.isEmpty) {
-                        EasyLoading.dismiss();
-                        return const Center(
-                            child: Text('Aucune caisse disponible'));
                       } else if (state is CaisseFail) {
                         EasyLoading.dismiss();
                         return const Center(

@@ -24,34 +24,53 @@ String deliveryInfoModelListToJson(List<DeliveryInfoModel> data) =>
 
 class DeliveryInfoModel extends DeliveryInfo {
   const DeliveryInfoModel({
-    required super.id,
-    required super.firstName,
-    required super.lastName,
-    required super.addressLineOne,
-    required super.addressLineTwo,
-    required super.city,
-    required super.zipCode,
-    required super.contactNumber,
-    required super.country,
-  });
+    required String id,
+    required String firstName,
+    required String lastName,
+    required String fullname,
+    String? company, // Nullable
+    required String addressLineOne,
+    String? addressLineTwo, // Nullable
+    required String city,
+    required String zipCode,
+    required String contactNumber,
+    required String country,
+  }) : super(
+          id: id,
+          firstName: firstName,
+          lastName: lastName,
+          fullname: fullname,
+          company: company ?? '',
+          addressLineOne: addressLineOne,
+          addressLineTwo: addressLineTwo ?? '',
+          city: city,
+          zipCode: zipCode,
+          contactNumber: contactNumber,
+          country: country,
+        );
 
-  factory DeliveryInfoModel.fromJson(Map<String, dynamic> json) =>
-      DeliveryInfoModel(
-        id: json["id"].toString(),
-        firstName: json["firstname"],
-        lastName: json["lastname"],
-        addressLineOne: json["addressLineOne"],
-        addressLineTwo: json["addressLineTwo"],
-        city: json["city"],
-        zipCode: json["zipCode"].toString(),
-        contactNumber: json["contactNumber"].toString(),
-        country: json["country"],
-      );
+  factory DeliveryInfoModel.fromJson(Map<String, dynamic> json) {
+    return DeliveryInfoModel(
+      id: json["id"]?.toString() ?? '',
+      firstName: json["firstname"] ?? '',
+      lastName: json["lastname"] ?? '',
+      fullname: json["fullname"] ?? '',
+      company: json["company"] ?? '',
+      addressLineOne: json["addressLineOne"] ?? '',
+      addressLineTwo: json["addressLineTwo"] ?? '',
+      city: json["city"] ?? '',
+      zipCode: json["zipCode"]?.toString() ?? '',
+      contactNumber: json["contactNumber"]?.toString() ?? '',
+      country: json["country"] ?? '',
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "firstname": firstName,
         "lastname": lastName,
+        "fullname": fullname,
+        "company": company,
         "addressLineOne": addressLineOne,
         "addressLineTwo": addressLineTwo,
         "city": city,
@@ -65,6 +84,8 @@ class DeliveryInfoModel extends DeliveryInfo {
         id: entity.id,
         firstName: entity.firstName,
         lastName: entity.lastName,
+        fullname: entity.fullname,
+        company: entity.company,
         addressLineOne: entity.addressLineOne,
         addressLineTwo: entity.addressLineTwo,
         city: entity.city,

@@ -136,6 +136,16 @@ class OrderDetailsPage extends StatelessWidget {
               style:
                   TextStyles.interRegularBody1.copyWith(color: Colors.white70),
             ),
+            Text(
+              'Color: ${item.productVariantColor}',
+              style:
+                  TextStyles.interRegularBody1.copyWith(color: Colors.white70),
+            ),
+            Text(
+              'Size: ${item.productVariantSize}',
+              style:
+                  TextStyles.interRegularBody1.copyWith(color: Colors.white70),
+            ),
             const SizedBox(height: Units.sizedbox_8),
             Text(
               'Price: \$${(item.totalPrice / 100).toStringAsFixed(2)}',
