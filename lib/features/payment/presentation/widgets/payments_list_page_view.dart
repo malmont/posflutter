@@ -58,16 +58,22 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
             children: [
               Expanded(
                 child: DashboardCard(
+                  title: "titre",
                   icon: Icons.attach_money,
-                  value: '10000',
-                  label: 'Transaction',
+                  currentValue: '5000',
+                  currentLabel: 'Total amount',
+                  lastValue: '4000',
+                  lastLabel: 'Last month',
                 ),
               ),
               Expanded(
                 child: DashboardCard(
+                  title: "titre",
                   icon: Icons.credit_card,
-                  value: '5000',
-                  label: 'Total amount',
+                  currentValue: '2000',
+                  currentLabel: 'Total amount',
+                  lastValue: '1500',
+                  lastLabel: 'Last month',
                 ),
               ),
             ],

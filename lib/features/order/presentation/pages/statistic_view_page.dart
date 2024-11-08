@@ -32,13 +32,21 @@ class StatistiquePageView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Statistiques',
+                      'Commandes',
+                      style: TextStyles.interBoldH5
+                          .copyWith(color: Colours.colorsButtonMenu),
+                    ),
+                    Text(
+                      'Semanie en cours',
                       style: TextStyles.interBoldH5
                           .copyWith(color: Colours.colorsButtonMenu),
                     ),
                     const SizedBox(height: Units.sizedbox_80),
                     Expanded(
-                      child: OrderAnalyticsPieWidget(),
+                      child: OrderAnalyticsPieWidget(
+                        dailyOrderCount: statistiqueOrderModel!
+                            .dailyCountAchatClientCompleteeForCurrentWeek,
+                      ),
                     ),
                   ],
                 ),
@@ -59,7 +67,10 @@ class StatistiquePageView extends StatelessWidget {
                           .copyWith(color: Colours.colorsButtonMenu),
                     ),
                     Expanded(
-                      child: OrderAnalyticsLineChart(),
+                      child: OrderAnalyticsLineChart(
+                        dailyRevenueForCurrentWeek:
+                            revenueStatisticsModel!.dailyRevenueForCurrentWeek,
+                      ),
                     ),
                   ],
                 ),

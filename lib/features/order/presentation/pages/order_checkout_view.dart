@@ -9,7 +9,7 @@ import 'package:pos_flutter/features/Caisse/application/blocs/caisse_bloc.dart';
 import 'package:pos_flutter/features/cart/application/blocs/cart_bloc.dart';
 import 'package:pos_flutter/features/cart/domain/entities/cart_item.dart';
 import 'package:pos_flutter/features/cart/presentation/widgets/input_form_button.dart';
-import 'package:pos_flutter/features/order/application/blocs/order_bloc.dart';
+import 'package:pos_flutter/features/order/application/blocs/order_bloc/order_bloc.dart';
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/order/domain/entities/order_detail_response.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/order_type_selection.dart';
@@ -42,7 +42,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
       child: BlocListener<OrderBloc, OrderState>(
         listener: (context, state) {
           EasyLoading.dismiss();
-          if (state is OrderAddLoading) {
+          if (state is OrderAddInProgress) {
             EasyLoading.show(status: 'Loading...');
           } else if (state is OrderAddSuccess) {
             context.read<CartBloc>().add(const ClearCart());
@@ -57,7 +57,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
             context.read<OrderBloc>().add(const GetOrders(FilterOrderParams()));
 
             EasyLoading.showSuccess("Order Placed Successfully");
-          } else if (state is OrderAddFail) {
+          } else if (state is OrderAddFailure) {
             EasyLoading.showError("Error");
           }
         },

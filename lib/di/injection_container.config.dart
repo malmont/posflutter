@@ -96,8 +96,12 @@ import 'package:pos_flutter/features/cart/domain/usecases/remove_cart_usecase.da
     as _i300;
 import 'package:pos_flutter/features/cart/infrastucture/repositories/cart_repository_impl.dart'
     as _i290;
-import 'package:pos_flutter/features/order/application/blocs/order_bloc.dart'
-    as _i813;
+import 'package:pos_flutter/features/order/application/blocs/order_bloc/order_bloc.dart'
+    as _i20;
+import 'package:pos_flutter/features/order/application/blocs/revenu_statistique_bloc/revenue_statistics_bloc.dart'
+    as _i319;
+import 'package:pos_flutter/features/order/application/blocs/statistique_order/statistique_order_bloc.dart'
+    as _i243;
 import 'package:pos_flutter/features/order/domain/repositories/order_repository.dart'
     as _i342;
 import 'package:pos_flutter/features/order/domain/usecases/add_order_usecase.dart'
@@ -303,18 +307,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i112.SignInUseCase(gh<_i40.AuthRepository>()));
     gh.lazySingleton<_i360.SignOutUseCase>(
         () => _i360.SignOutUseCase(gh<_i40.AuthRepository>()));
-    gh.factory<_i813.OrderBloc>(() => _i813.OrderBloc(
-          gh<_i555.GetRemoteOrdersUseCase>(),
-          gh<_i739.GetCachedOrdersUseCase>(),
-          gh<_i767.ClearLocalOrdersUseCase>(),
-          gh<_i434.AddOrderUseCase>(),
-          gh<_i933.GetRemoteRevenueStatisticsUseCase>(),
-          gh<_i966.GetRemoteStatistiqueOrderUseCase>(),
-          gh<_i721.GetCachedRevenueStatisticsUseCase>(),
-          gh<_i684.GetCachedStatisticsOrderUseCase>(),
-          gh<_i224.ClearLocalStatisticsOrderUseCase>(),
-          gh<_i975.ClearLocalRevenueStatisticsUseCase>(),
-        ));
     gh.factory<_i644.AuthBloc>(() => _i644.AuthBloc(
           checkTokenValidityUseCase: gh<_i935.CheckTokenValidityUseCase>(),
           signInUseCase: gh<_i112.SignInUseCase>(),
@@ -346,12 +338,28 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i722.WithDrawCaisseUseCase>(),
           gh<_i951.DepositCaisseUseCase>(),
         ));
+    gh.factory<_i243.StatistiqueOrderBloc>(() => _i243.StatistiqueOrderBloc(
+          gh<_i966.GetRemoteStatistiqueOrderUseCase>(),
+          gh<_i684.GetCachedStatisticsOrderUseCase>(),
+          gh<_i224.ClearLocalStatisticsOrderUseCase>(),
+        ));
+    gh.factory<_i20.OrderBloc>(() => _i20.OrderBloc(
+          gh<_i555.GetRemoteOrdersUseCase>(),
+          gh<_i739.GetCachedOrdersUseCase>(),
+          gh<_i767.ClearLocalOrdersUseCase>(),
+          gh<_i434.AddOrderUseCase>(),
+        ));
     gh.factory<_i305.PaymentBloc>(() => _i305.PaymentBloc(
           gh<_i510.GetRemotePaymentUsecase>(),
           gh<_i974.GetCachedPaymentUsecase>(),
         ));
     gh.factory<_i229.SignInViewModel>(
         () => _i229.SignInViewModel(gh<_i644.AuthBloc>()));
+    gh.factory<_i319.RevenueStatisticsBloc>(() => _i319.RevenueStatisticsBloc(
+          gh<_i933.GetRemoteRevenueStatisticsUseCase>(),
+          gh<_i721.GetCachedRevenueStatisticsUseCase>(),
+          gh<_i975.ClearLocalRevenueStatisticsUseCase>(),
+        ));
     return this;
   }
 }

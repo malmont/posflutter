@@ -28,19 +28,19 @@ class RevenueStatisticsModel extends RevenueStatistics {
 
   factory RevenueStatisticsModel.fromJson(Map<String, dynamic> json) {
     return RevenueStatisticsModel(
-      currentWeekRevenue: json['currentWeekRevenue'],
-      lastWeekRevenue: json['lastWeekRevenue'],
+      currentWeekRevenue: (json['currentWeekRevenue'] as num).toDouble(),
+      lastWeekRevenue: (json['lastWeekRevenue'] as num).toDouble(),
       dailyRevenueForCurrentWeek: (json['dailyRevenueForCurrentWeek'] as List)
           .map((item) => DailyRevenueModel.fromJson(item))
           .toList(),
-      currentMonthRevenue: json['currentMonthRevenue'],
-      lastMonthRevenue: json['lastMonthRevenue'],
+      currentMonthRevenue: (json['currentMonthRevenue'] as num).toDouble(),
+      lastMonthRevenue: (json['lastMonthRevenue'] as num).toDouble(),
       weeklyRevenueForCurrentMonth:
           (json['weeklyRevenueForCurrentMonth'] as List)
               .map((item) => WeeklyRevenueModel.fromJson(item))
               .toList(),
-      currentYearRevenue: json['currentYearRevenue'],
-      lastYearRevenue: json['lastYearRevenue'],
+      currentYearRevenue: (json['currentYearRevenue'] as num).toDouble(),
+      lastYearRevenue: (json['lastYearRevenue'] as num).toDouble(),
       monthlyRevenueForCurrentYear:
           (json['monthlyRevenueForCurrentYear'] as List)
               .map((item) => MonthlyRevenueModel.fromJson(item))

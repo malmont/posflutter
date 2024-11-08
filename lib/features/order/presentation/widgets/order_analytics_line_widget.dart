@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-
+import 'package:pos_flutter/features/order/domain/entities/daily_revenue.dart';
 import '../../../../design/design.dart';
 
 class OrderAnalyticsLineChart extends StatelessWidget {
-  final List<Map<String, dynamic>> lineChartData = [
-    {'day': '2024-09-01', 'orders': 20},
-    {'day': '2024-09-02', 'orders': 35},
-    {'day': '2024-09-03', 'orders': 40},
-    {'day': '2024-09-04', 'orders': 28},
-    {'day': '2024-09-05', 'orders': 45},
-    {'day': '2024-09-06', 'orders': 30},
-    {'day': '2024-09-07', 'orders': 50},
-  ];
+  final List<DailyRevenue> dailyRevenueForCurrentWeek;
 
-  OrderAnalyticsLineChart({super.key});
+  OrderAnalyticsLineChart(
+      {super.key, required this.dailyRevenueForCurrentWeek});
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +31,19 @@ class OrderAnalyticsLineChart extends StatelessWidget {
                           showTitles: true,
                           reservedSize: 30,
                           getTitlesWidget: (value, meta) {
-                            return Text(
-                              '${value.toInt()}',
-                              style: TextStyles.interItalicTiny.copyWith(
-                                color: Colours.colorsButtonMenu,
-                              ),
-                            );
+                            int index = value.toInt();
+                            if (index >= 0 &&
+                                index < dailyRevenueForCurrentWeek.length) {
+                              final date =
+                                  dailyRevenueForCurrentWeek[index].date;
+                              return Text(
+                                '${date.day}/${date.month}',
+                                style: TextStyles.interItalicTiny.copyWith(
+                                  color: Colours.colorsButtonMenu,
+                                ),
+                              );
+                            }
+                            return const Text('');
                           },
                         ),
                       ),
@@ -52,7 +52,7 @@ class OrderAnalyticsLineChart extends StatelessWidget {
                           showTitles: true,
                           getTitlesWidget: (value, meta) {
                             return Text(
-                              '${value.toInt()}',
+                              '\$${value.toStringAsFixed(0)}',
                               style: TextStyles.interItalicTiny.copyWith(
                                 color: Colours.colorsButtonMenu,
                               ),
@@ -69,10 +69,14 @@ class OrderAnalyticsLineChart extends StatelessWidget {
                     lineBarsData: [
                       LineChartBarData(
                         color: Colours.colorsButtonMenu,
-                        spots: lineChartData.map((data) {
-                          final day =
-                              DateTime.parse(data['day']).day.toDouble();
-                          return FlSpot(day, data['orders'].toDouble());
+                        spots: dailyRevenueForCurrentWeek
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                          final index = entry.key.toDouble();
+                          final revenue = entry.value.revenue /
+                              100; // Conversion en dollars
+                          return FlSpot(index, revenue);
                         }).toList(),
                       ),
                     ],
@@ -86,7 +90,7 @@ class OrderAnalyticsLineChart extends StatelessWidget {
               child: RotatedBox(
                 quarterTurns: 0,
                 child: Text(
-                  'Orders',
+                  'Revenue (\$)',
                   style: TextStyles.interSemiBoldTiny
                       .copyWith(color: Colours.colorsButtonMenu),
                 ),
