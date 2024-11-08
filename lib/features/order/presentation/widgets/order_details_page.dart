@@ -2,22 +2,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pos_flutter/features/order/domain/entities/order_details.dart';
 import 'package:pos_flutter/features/order/domain/entities/order_item.dart';
-import 'package:pos_flutter/features/order/infrastucture/models/revenue_statistics_model.dart';
-import 'package:pos_flutter/features/order/infrastucture/models/statistique_order_model.dart';
+
 import '../../../../design/design.dart';
 
 class OrderDetailsPage extends StatelessWidget {
   final OrderDetails orderDetails;
   final VoidCallback onBack;
-  final StatistiqueOrderModel? statistiqueOrderModel;
-  final RevenueStatisticsModel? revenueStatisticsModel;
 
-  const OrderDetailsPage(
-      {super.key,
-      required this.orderDetails,
-      required this.onBack,
-      required this.statistiqueOrderModel,
-      required this.revenueStatisticsModel});
+  const OrderDetailsPage({
+    super.key,
+    required this.orderDetails,
+    required this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {

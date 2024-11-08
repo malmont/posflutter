@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:pos_flutter/features/products/domain/entities/product/style.dart';
-
-import '../../../../design/design.dart';
+import 'package:pos_flutter/design/design.dart';
+import 'package:pos_flutter/features/order/domain/entities/daily_order_count.dart';
 
 class OrderAnalyticsPieWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> pieChartData = [
-    {'status': 'En attente', 'count': 30},
-    {'status': 'En préparation', 'count': 40},
-    {'status': 'Livré', 'count': 20},
-    {'status': 'Annulé', 'count': 10},
-  ];
+  final List<DailyOrderCount> dailyOrderCount;
 
-  OrderAnalyticsPieWidget({super.key});
+  OrderAnalyticsPieWidget({super.key, required this.dailyOrderCount});
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +17,15 @@ class OrderAnalyticsPieWidget extends StatelessWidget {
         child: PieChart(
           PieChartData(
             centerSpaceColor: Colours.primary100,
-            sections: pieChartData.map((data) {
+            sections: dailyOrderCount
+                .where((data) => data.orderCount > 0)
+                .map((data) {
               return PieChartSectionData(
                 titleStyle:
                     TextStyles.interRegularBody1.copyWith(color: Colours.white),
                 color: Colours.colorsButtonMenu,
-                value: data['count'].toDouble(),
-                title: data['status'],
+                value: data.orderCount.toDouble(),
+                title: '${data.date.day}/${data.date.month}',
               );
             }).toList(),
           ),

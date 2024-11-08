@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pos_flutter/design/design.dart';
-import 'package:pos_flutter/features/order/application/blocs/order_bloc.dart';
+import 'package:pos_flutter/features/order/application/blocs/order_bloc/order_bloc.dart';
+import 'package:pos_flutter/features/order/application/blocs/revenu_statistique_bloc/revenue_statistics_bloc.dart';
+import 'package:pos_flutter/features/order/application/blocs/statistique_order/statistique_order_bloc.dart';
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/order/domain/entities/order_details.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/dashboard_card.dart';
@@ -49,31 +51,74 @@ class _OrdersListPageState extends State<OrdersListPage> {
       ),
       body: Column(
         children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: DashboardCard(
-                  icon: Icons.shopping_cart,
-                  value: '1000',
-                  label: 'Total Orders',
-                ),
-              ),
-              Expanded(
-                child: DashboardCard(
-                  icon: Icons.monetization_on,
-                  value: '500',
-                  label: 'Total Taxes',
-                ),
-              ),
-              Expanded(
-                child: DashboardCard(
-                  icon: Icons.attach_money_rounded,
-                  value: '15000',
-                  label: 'Total Revenue',
-                ),
-              ),
-            ],
+          BlocBuilder<StatistiqueOrderBloc, StatistiqueOrderState>(
+            builder: (context, statistiqueState) {
+              return BlocBuilder<RevenueStatisticsBloc, RevenueStatisticsState>(
+                builder: (context, revenueState) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: DashboardCard(
+                          title: "Chiffres d'affaires",
+                          icon: Icons.monetization_on,
+                          currentValue: revenueState
+                                  is RevenueStatisticsLoadSuccess
+                              ? '\$${(revenueState.revenueStatisticsModel.currentWeekRevenue / 100).toStringAsFixed(2)}'
+                              : 'N/A',
+                          currentLabel: "semaine en cours",
+                          lastValue: revenueState
+                                  is RevenueStatisticsLoadSuccess
+                              ? '\$${(revenueState.revenueStatisticsModel.lastWeekRevenue / 100).toStringAsFixed(2)}'
+                              : 'N/A',
+                          lastLabel: 'Semaine dernière',
+                        ),
+                      ),
+                      Expanded(
+                        child: DashboardCard(
+                          title: "Commandes",
+                          icon: Icons.shopping_cart,
+                          currentValue:
+                              statistiqueState is StatistiqueOrderLoadSuccess
+                                  ? statistiqueState.statistiqueOrderModel
+                                      .currentWeekCountAchatClientCompletee
+                                      .toString()
+                                  : 'N/A',
+                          currentLabel: 'semaine en cours',
+                          lastValue:
+                              statistiqueState is StatistiqueOrderLoadSuccess
+                                  ? statistiqueState.statistiqueOrderModel
+                                      .lastWeekCountAchatClientCompletee
+                                      .toString()
+                                  : 'N/A',
+                          lastLabel: 'semaine dernière',
+                        ),
+                      ),
+                      Expanded(
+                        child: DashboardCard(
+                          title: "Annulation",
+                          icon: Icons.cancel,
+                          currentValue:
+                              statistiqueState is StatistiqueOrderLoadSuccess
+                                  ? statistiqueState.statistiqueOrderModel
+                                      .currentWeekCountAchatClientAnnulation
+                                      .toString()
+                                  : 'N/A',
+                          currentLabel: 'semaine en cours',
+                          lastValue:
+                              statistiqueState is StatistiqueOrderLoadSuccess
+                                  ? statistiqueState.statistiqueOrderModel
+                                      .lastWeekCountAchatClientAnnulation
+                                      .toString()
+                                  : 'N/A',
+                          lastLabel: 'Semaine dernière',
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
           GenericList<DaySelection>(
             items: daySelections,

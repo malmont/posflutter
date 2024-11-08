@@ -12,7 +12,7 @@ class MonthlyRevenueModel extends MonthlyRevenue {
   factory MonthlyRevenueModel.fromJson(Map<String, dynamic> json) {
     return MonthlyRevenueModel(
       month: json['month'],
-      revenue: json['revenue'],
+      revenue: (json['revenue'] as num).toDouble(),
     );
   }
 

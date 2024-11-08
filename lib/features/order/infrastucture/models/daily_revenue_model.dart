@@ -12,7 +12,8 @@ class DailyRevenueModel extends DailyRevenue {
   factory DailyRevenueModel.fromJson(Map<String, dynamic> json) {
     return DailyRevenueModel(
       date: DateTime.parse(json['date']),
-      revenue: json['revenue'],
+      revenue:
+          (json['revenue'] as num).toDouble(), // Conversion explicite en double
     );
   }
 

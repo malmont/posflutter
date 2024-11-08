@@ -4,14 +4,20 @@ import '../../../../design/design.dart';
 
 class DashboardCard extends StatelessWidget {
   final IconData icon;
-  final String value;
-  final String label;
+  final String currentValue;
+  final String currentLabel;
+  final String lastValue;
+  final String lastLabel;
+  final String title;
 
   const DashboardCard({
     super.key,
     required this.icon,
-    required this.value,
-    required this.label,
+    required this.currentValue,
+    required this.currentLabel,
+    required this.lastValue,
+    required this.lastLabel,
+    required this.title,
   });
 
   @override
@@ -30,6 +36,11 @@ class DashboardCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              title,
+              style: TextStyles.interBoldH5
+                  .copyWith(color: Colours.colorsButtonMenu),
+            ),
             Padding(
               padding: const EdgeInsets.all(Units.edgeInsetsXLarge),
               child: Icon(
@@ -39,17 +50,31 @@ class DashboardCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(Units.edgeInsetsLarge),
-              child: Text('\$$value',
-                  style: TextStyles.interRegularBody1
-                      .copyWith(color: Colors.white)),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(Units.edgeInsetsLarge),
-              child: Text(label,
+              padding: const EdgeInsets.all(Units.edgeInsetsSmall),
+              child: Text(currentLabel,
                   style: TextStyles.interRegularBody1.copyWith(
                     color: Colours.colorsButtonMenu,
                   )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(Units.edgeInsetsSmall),
+              child: Text(currentValue,
+                  style: TextStyles.interRegularBody1
+                      .copyWith(color: Colors.white)),
+            ),
+            const SizedBox(height: Units.sizedbox_10),
+            Padding(
+              padding: const EdgeInsets.all(Units.edgeInsetsSmall),
+              child: Text(lastLabel,
+                  style: TextStyles.interRegularBody1.copyWith(
+                    color: Colours.colorsButtonMenu,
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(Units.edgeInsetsSmall),
+              child: Text(lastValue,
+                  style: TextStyles.interRegularBody1
+                      .copyWith(color: Colors.white)),
             ),
           ],
         ),

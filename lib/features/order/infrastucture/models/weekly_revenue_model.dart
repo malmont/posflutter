@@ -12,7 +12,7 @@ class WeeklyRevenueModel extends WeeklyRevenue {
   factory WeeklyRevenueModel.fromJson(Map<String, dynamic> json) {
     return WeeklyRevenueModel(
       week: json['week'],
-      revenue: json['revenue'],
+      revenue: (json['revenue'] as num).toDouble(),
     );
   }
 

@@ -4,7 +4,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pos_flutter/features/Caisse/application/blocs/caisse_bloc.dart';
 import 'package:pos_flutter/features/cart/application/blocs/cart_bloc.dart';
 import 'package:pos_flutter/features/home/application/blocs/side_menu_bloc.dart';
-import 'package:pos_flutter/features/order/application/blocs/order_bloc.dart';
+import 'package:pos_flutter/features/order/application/blocs/order_bloc/order_bloc.dart';
+import 'package:pos_flutter/features/order/application/blocs/revenu_statistique_bloc/revenue_statistics_bloc.dart';
+import 'package:pos_flutter/features/order/application/blocs/statistique_order/statistique_order_bloc.dart';
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/products/application/blocs/product_bloc.dart';
 import 'package:pos_flutter/features/products/domain/entities/product/filter_product_params.dart';
@@ -51,6 +53,14 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<CartBloc>()..add(const GetCart()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              getIt<StatistiqueOrderBloc>()..add(const GetStatistiqueOrder()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              getIt<RevenueStatisticsBloc>()..add(const GetRevenueStatistics()),
         ),
         BlocProvider(
           create: (context) =>
