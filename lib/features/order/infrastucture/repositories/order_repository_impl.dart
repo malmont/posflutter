@@ -12,6 +12,8 @@ import 'package:pos_flutter/features/order/domain/entities/order_detail_response
 import 'package:pos_flutter/features/order/domain/entities/order_details.dart';
 import 'package:pos_flutter/features/order/domain/repositories/order_repository.dart';
 import 'package:pos_flutter/features/order/infrastucture/models/order_detail_response_model.dart';
+import 'package:pos_flutter/features/order/infrastucture/models/revenue_statistics_model.dart';
+import 'package:pos_flutter/features/order/infrastucture/models/statistique_order_model.dart';
 
 import '../../../../core/error/failures.dart';
 
@@ -62,6 +64,71 @@ class OrderRepositoryImpl implements OrderRepository {
   Future<Either<Failure, NoParams>> clearLocalOrders() async {
     try {
       await localDataSource.clearOrder();
+      return Right(NoParams());
+    } on Failure catch (failure) {
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, StatistiqueOrderModel>>
+      getRemoteStatistiqueOrder() async {
+    return await executeApiCall(() async {
+      final remoteStatisticsOrder =
+          await remoteDataSource.getStatistiqueOrderModel();
+      await localDataSource.saveStatistiqueOrder(remoteStatisticsOrder);
+      return remoteStatisticsOrder;
+    }, userLocalDataSource);
+  }
+
+  @override
+  Future<Either<Failure, RevenueStatisticsModel>>
+      getRemoteRevenueStatistics() async {
+    return await executeApiCall(() async {
+      final remoteRevenueStatistics =
+          await remoteDataSource.getRevenueStatisticsModel();
+      await localDataSource.saveRevenueStatistics(remoteRevenueStatistics);
+      return remoteRevenueStatistics;
+    }, userLocalDataSource);
+  }
+
+  @override
+  Future<Either<Failure, StatistiqueOrderModel>>
+      getCachedStatistiqueOrder() async {
+    try {
+      final localStatistiqueOrder = await localDataSource.getStatistiqueOrder();
+      return Right(localStatistiqueOrder);
+    } on Failure catch (failure) {
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, RevenueStatisticsModel>>
+      getCachedRevenueStatistics() async {
+    try {
+      final localRevenueStatistics =
+          await localDataSource.getRevenueStatistics();
+      return Right(localRevenueStatistics);
+    } on Failure catch (failure) {
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, NoParams>> clearLocalStatistiqueOrder() async {
+    try {
+      await localDataSource.clearStatistiqueOrder();
+      return Right(NoParams());
+    } on Failure catch (failure) {
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, NoParams>> clearLocalRevenueStatistics() async {
+    try {
+      await localDataSource.clearRevenueStatistics();
       return Right(NoParams());
     } on Failure catch (failure) {
       return Left(failure);

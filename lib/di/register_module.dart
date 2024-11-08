@@ -7,6 +7,7 @@ import 'package:pos_flutter/core/services/api/caisse_api_client.dart';
 import 'package:pos_flutter/core/services/api/order_api_client.dart';
 import 'package:pos_flutter/core/services/api/payment_api_client.dart';
 import 'package:pos_flutter/core/services/api/product_api_client.dart';
+import 'package:pos_flutter/core/services/api/statistique_order_api_client.dart';
 import 'package:pos_flutter/core/services/api/user_api_client.dart';
 import 'package:pos_flutter/core/services/data_sources/local/user_local_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,4 +49,8 @@ abstract class RegisterModule {
 
   @lazySingleton
   PaymentApiClient paymentApiClient(Dio dio) => PaymentApiClient(dio);
+
+  @lazySingleton
+  StatistiqueOrderApiClient statistiqueOrderApiClient(Dio dio) =>
+      StatistiqueOrderApiClient(dio);
 }
