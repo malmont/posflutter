@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:pos_flutter/design/colours.dart';
+import 'package:pos_flutter/features/order/infrastucture/models/revenue_statistics_model.dart';
+import 'package:pos_flutter/features/order/infrastucture/models/statistique_order_model.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/order_analytics_Line_widget.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/order_analytics_pie_widget.dart';
 
 import '../../../../design/design.dart';
 
 class StatistiquePageView extends StatelessWidget {
-  const StatistiquePageView({super.key});
+  final StatistiqueOrderModel? statistiqueOrderModel;
+  final RevenueStatisticsModel? revenueStatisticsModel;
+  const StatistiquePageView(
+      {super.key,
+      required this.statistiqueOrderModel,
+      required this.revenueStatisticsModel});
 
   @override
   Widget build(BuildContext context) {

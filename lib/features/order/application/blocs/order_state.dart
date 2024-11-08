@@ -68,3 +68,61 @@ class OrderFetchFail extends OrderState {
   @override
   List<Object> get props => [failure];
 }
+
+class OrderFetchLoadingStatistiqueOrder extends OrderState {
+  const OrderFetchLoadingStatistiqueOrder({
+    required super.orders,
+    required super.params,
+  });
+}
+
+class OrderFetchLoadingRevenueStatistics extends OrderState {
+  const OrderFetchLoadingRevenueStatistics({
+    required super.orders,
+    required super.params,
+  });
+}
+
+class OrderFetchSuccessStatistiqueOrder extends OrderState {
+  final StatistiqueOrderModel statistiqueOrderModel;
+  const OrderFetchSuccessStatistiqueOrder({
+    required this.statistiqueOrderModel,
+    required super.orders,
+    required super.params,
+  });
+  @override
+  List<Object> get props => [statistiqueOrderModel, orders, params];
+}
+
+class OrderFetchSuccessRevenueStatistics extends OrderState {
+  final RevenueStatisticsModel revenueStatisticsModel;
+  const OrderFetchSuccessRevenueStatistics({
+    required this.revenueStatisticsModel,
+    required super.orders,
+    required super.params,
+  });
+  @override
+  List<Object> get props => [revenueStatisticsModel, orders, params];
+}
+
+class OrderFetchFailStatistiqueOrder extends OrderState {
+  final Failure failure;
+  const OrderFetchFailStatistiqueOrder({
+    required this.failure,
+    required super.orders,
+    required super.params,
+  });
+  @override
+  List<Object> get props => [failure, orders, params];
+}
+
+class OrderFetchFailRevenueStatistics extends OrderState {
+  final Failure failure;
+  const OrderFetchFailRevenueStatistics({
+    required this.failure,
+    required super.orders,
+    required super.params,
+  });
+  @override
+  List<Object> get props => [failure, orders, params];
+}

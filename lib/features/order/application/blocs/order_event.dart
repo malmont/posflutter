@@ -26,3 +26,31 @@ class AddOrder extends OrderEvent {
   @override
   List<Object> get props => [params];
 }
+
+class GetStatistiqueOrder extends OrderEvent {
+  const GetStatistiqueOrder();
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetRevenueStatistics extends OrderEvent {
+  const GetRevenueStatistics();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ClearLocalStatistiqueOrder extends OrderEvent {
+  const ClearLocalStatistiqueOrder();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ClearLocalRevenueStatistics extends OrderEvent {
+  const ClearLocalRevenueStatistics();
+
+  @override
+  List<Object> get props => [];
+}

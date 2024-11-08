@@ -26,15 +26,19 @@ class _OrderViewState extends State<OrderView> {
     context
         .read<OrderBloc>()
         .add(const GetOrders(FilterOrderParams(orderSource: 2, days: 1)));
+    context.read<OrderBloc>().add(const GetStatistiqueOrder());
+    context.read<OrderBloc>().add(const GetRevenueStatistics());
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    context
-        .read<OrderBloc>()
-        .add(const GetOrders(FilterOrderParams(orderSource: 2, days: 1)));
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   context
+  //       .read<OrderBloc>()
+  //       .add(const GetOrders(FilterOrderParams(orderSource: 2, days: 1)));
+  //   context.read<OrderBloc>().add(const GetStatistiqueOrder());
+  //   context.read<OrderBloc>().add(const GetRevenueStatistics());
+  // }
 
   void navigateToDetails(OrderDetails order) {
     setState(() {
@@ -52,33 +56,32 @@ class _OrderViewState extends State<OrderView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colours.primary100,
-      body: Row(
-        children: [
-          Expanded(
-            flex: 7,
-            child: Stack(
-              children: [
-                if (selectedOrder == null)
-                  BlocBuilder<OrderBloc, OrderState>(
-                    builder: (context, state) {
-                      if (state is OrderFetchLoading) {
-                        EasyLoading.show(status: 'Chargement...');
-                      } else {
-                        EasyLoading.dismiss();
-                      }
+      body: BlocBuilder<OrderBloc, OrderState>(
+        builder: (context, state) {
+          if (state is OrderFetchLoading) {
+            EasyLoading.show(status: 'Chargement...');
+          } else {
+            EasyLoading.dismiss();
+          }
 
-                      if (state is OrderFetchSuccess) {
-                        return OrdersListPage(
+          return Row(
+            children: [
+              Expanded(
+                flex: 7,
+                child: Stack(
+                  children: [
+                    if (selectedOrder == null) ...[
+                      if (state is OrderFetchSuccess)
+                        OrdersListPage(
                           orders: state.orders,
                           onSelectOrder: navigateToDetails,
-                        );
-                      }
-                      if (state is OrderFetchFail) {
-                        EasyLoading.dismiss();
-                        return const Center(
-                            child: Text('Échec du chargement des commandes.'));
-                      } else {
-                        return ListView.builder(
+                        )
+                      else if (state is OrderFetchFail)
+                        const Center(
+                          child: Text('Échec du chargement des commandes.'),
+                        )
+                      else
+                        ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           itemCount: 6,
                           padding: EdgeInsets.only(
@@ -89,23 +92,40 @@ class _OrderViewState extends State<OrderView> {
                             top: 10,
                           ),
                           itemBuilder: (context, index) => const SizedBox(),
-                        );
-                      }
-                    },
-                  ),
-                if (selectedOrder != null)
-                  OrderDetailsPage(
-                    orderDetails: selectedOrder!,
-                    onBack: goBackToList,
-                  ),
-              ],
-            ),
-          ),
-          const Expanded(
-            flex: 3,
-            child: StatistiquePageView(),
-          ),
-        ],
+                        ),
+                    ],
+                    if (selectedOrder != null)
+                      OrderDetailsPage(
+                        orderDetails: selectedOrder!,
+                        onBack: goBackToList,
+                        statistiqueOrderModel:
+                            state is OrderFetchSuccessStatistiqueOrder
+                                ? state.statistiqueOrderModel
+                                : null,
+                        revenueStatisticsModel:
+                            state is OrderFetchSuccessRevenueStatistics
+                                ? state.revenueStatisticsModel
+                                : null,
+                      ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: StatistiquePageView(
+                  statistiqueOrderModel:
+                      state is OrderFetchSuccessStatistiqueOrder
+                          ? state.statistiqueOrderModel
+                          : null,
+                  revenueStatisticsModel:
+                      state is OrderFetchSuccessRevenueStatistics
+                          ? state.revenueStatisticsModel
+                          : null,
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
