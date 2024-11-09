@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:pos_flutter/core/utils/AmountInputDialog.dart';
 import 'package:pos_flutter/features/Caisse/domain/entities/caisse.dart';
 import 'package:pos_flutter/features/Caisse/presentation/pages/caisse_actions_view_page.dart';
 import 'package:pos_flutter/features/caisse/presentation/widgets/caisse_details_page.dart';
@@ -101,12 +102,32 @@ class _CaisseViewState extends State<CaisseView> {
                       context.read<CaisseBloc>().add(const CloseCaisse());
                     },
                     onWithdraw: () {
-                      context
-                          .read<CaisseBloc>()
-                          .add(const WithDrawCaisse(1000));
+                      showAmountDialog(context, 'Retrait', (double amount) {
+                        if (amount > 0) {
+                          context
+                              .read<CaisseBloc>()
+                              .add(WithDrawCaisse(amount));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content:
+                                    Text('Veuillez entrer un montant valide.')),
+                          );
+                        }
+                      });
                     },
                     onDeposit: () {
-                      context.read<CaisseBloc>().add(const DepositCaisse(1000));
+                      showAmountDialog(context, 'Dépôt', (double amount) {
+                        if (amount > 0) {
+                          context.read<CaisseBloc>().add(DepositCaisse(amount));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content:
+                                    Text('Veuillez entrer un montant valide.')),
+                          );
+                        }
+                      });
                     },
                   );
                 } else if (state is CaisseSuccess && state.caisses.isEmpty) {
