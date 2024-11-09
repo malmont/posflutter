@@ -51,24 +51,25 @@ class CaisseActionsPage extends StatelessWidget {
                 children: [
                   Text(
                     'Caisse ouverte en cours: ID ${caisseDetails!.id}',
-                    style: TextStyles.interBoldH6.copyWith(color: Colors.white),
+                    style: TextStyles.interBoldH6
+                        .copyWith(color: Colours.colorsButtonMenu),
                   ),
-                  const SizedBox(height: Units.sizedbox_10),
+                  const SizedBox(height: Units.sizedbox_20),
                   Text(
                     'Montant total : \$${(caisseDetails!.amountTotal / 100).toStringAsFixed(2)}',
                     style: TextStyles.interRegularBody1
                         .copyWith(color: Colors.white),
                   ),
-                  const SizedBox(height: Units.sizedbox_10),
+                  const SizedBox(height: Units.sizedbox_20),
                   Text(
                     'Date de création : ${caisseDetails!.createdAt}',
                     style: TextStyles.interRegularBody1
                         .copyWith(color: Colors.white),
                   ),
-                  const SizedBox(height: Units.sizedbox_10),
+                  const SizedBox(height: Units.sizedbox_20),
                   Text(
                     'Statut : ${caisseDetails!.isOpen ? "Ouverte" : "Fermée"}',
-                    style: TextStyles.interRegularBody1.copyWith(
+                    style: TextStyles.interBoldBody1.copyWith(
                         color:
                             caisseDetails!.isOpen ? Colors.green : Colors.red),
                   ),

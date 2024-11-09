@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pos_flutter/design/design.dart';
 import 'package:pos_flutter/features/order/application/blocs/order_bloc/order_bloc.dart';
 import 'package:pos_flutter/features/order/application/blocs/revenu_statistique_bloc/revenue_statistics_bloc.dart';
@@ -11,7 +12,7 @@ import 'package:pos_flutter/features/products/presentation/widgets/generic_list.
 
 class OrdersListPage extends StatefulWidget {
   final List<OrderDetails> orders;
-  final Function(OrderDetails) onSelectOrder; // Add the onSelectOrder callback
+  final Function(OrderDetails) onSelectOrder;
 
   const OrdersListPage(
       {super.key, required this.orders, required this.onSelectOrder});
@@ -55,67 +56,63 @@ class _OrdersListPageState extends State<OrdersListPage> {
             builder: (context, statistiqueState) {
               return BlocBuilder<RevenueStatisticsBloc, RevenueStatisticsState>(
                 builder: (context, revenueState) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: DashboardCard(
-                          title: "Chiffres d'affaires",
-                          icon: Icons.monetization_on,
-                          currentValue: revenueState
-                                  is RevenueStatisticsLoadSuccess
-                              ? '\$${(revenueState.revenueStatisticsModel.currentWeekRevenue / 100).toStringAsFixed(2)}'
-                              : 'N/A',
-                          currentLabel: "semaine en cours",
-                          lastValue: revenueState
-                                  is RevenueStatisticsLoadSuccess
-                              ? '\$${(revenueState.revenueStatisticsModel.lastWeekRevenue / 100).toStringAsFixed(2)}'
-                              : 'N/A',
-                          lastLabel: 'Semaine dernière',
+                  if (revenueState is RevenueStatisticsLoadInProgress ||
+                      statistiqueState is StatistiqueOrderLoadInProgress) {
+                    EasyLoading.show(status: 'Chargement des statistiques...');
+                  } else {
+                    EasyLoading.dismiss();
+                  }
+
+                  if (statistiqueState is StatistiqueOrderLoadSuccess &&
+                      revenueState is RevenueStatisticsLoadSuccess) {
+                    EasyLoading.dismiss();
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: DashboardCard(
+                            title: "Chiffres d'affaires",
+                            icon: Icons.monetization_on,
+                            currentValue:
+                                '\$${(revenueState.revenueStatisticsModel.currentWeekRevenue / 100).toStringAsFixed(2)}',
+                            currentLabel: "semaine en cours",
+                            lastValue:
+                                '\$${(revenueState.revenueStatisticsModel.lastWeekRevenue / 100).toStringAsFixed(2)}',
+                            lastLabel: 'Semaine dernière',
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: DashboardCard(
-                          title: "Commandes",
-                          icon: Icons.shopping_cart,
-                          currentValue:
-                              statistiqueState is StatistiqueOrderLoadSuccess
-                                  ? statistiqueState.statistiqueOrderModel
-                                      .currentWeekCountAchatClientCompletee
-                                      .toString()
-                                  : 'N/A',
-                          currentLabel: 'semaine en cours',
-                          lastValue:
-                              statistiqueState is StatistiqueOrderLoadSuccess
-                                  ? statistiqueState.statistiqueOrderModel
-                                      .lastWeekCountAchatClientCompletee
-                                      .toString()
-                                  : 'N/A',
-                          lastLabel: 'semaine dernière',
+                        Expanded(
+                          child: DashboardCard(
+                            title: "Commandes",
+                            icon: Icons.shopping_cart,
+                            currentValue: statistiqueState.statistiqueOrderModel
+                                .currentWeekCountAchatClientCompletee
+                                .toString(),
+                            currentLabel: 'semaine en cours',
+                            lastValue: statistiqueState.statistiqueOrderModel
+                                .lastWeekCountAchatClientCompletee
+                                .toString(),
+                            lastLabel: 'semaine dernière',
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: DashboardCard(
-                          title: "Annulation",
-                          icon: Icons.cancel,
-                          currentValue:
-                              statistiqueState is StatistiqueOrderLoadSuccess
-                                  ? statistiqueState.statistiqueOrderModel
-                                      .currentWeekCountAchatClientAnnulation
-                                      .toString()
-                                  : 'N/A',
-                          currentLabel: 'semaine en cours',
-                          lastValue:
-                              statistiqueState is StatistiqueOrderLoadSuccess
-                                  ? statistiqueState.statistiqueOrderModel
-                                      .lastWeekCountAchatClientAnnulation
-                                      .toString()
-                                  : 'N/A',
-                          lastLabel: 'Semaine dernière',
+                        Expanded(
+                          child: DashboardCard(
+                            title: "Annulation",
+                            icon: Icons.cancel,
+                            currentValue: statistiqueState.statistiqueOrderModel
+                                .currentWeekCountAchatClientAnnulation
+                                .toString(),
+                            currentLabel: 'semaine en cours',
+                            lastValue: statistiqueState.statistiqueOrderModel
+                                .lastWeekCountAchatClientAnnulation
+                                .toString(),
+                            lastLabel: 'Semaine dernière',
+                          ),
                         ),
-                      ),
-                    ],
-                  );
+                      ],
+                    );
+                  }
+                  return const SizedBox();
                 },
               );
             },

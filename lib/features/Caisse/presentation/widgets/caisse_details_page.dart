@@ -19,8 +19,11 @@ class CaisseDetailsPage extends StatelessWidget {
       backgroundColor: Colours.primary100,
       appBar: AppBar(
         backgroundColor: Colours.primary100,
-        title:
-            const Text('Détails de la Caisse', style: TextStyles.interBoldH4),
+        title: Text(
+          'Détails de la Caisse',
+          style: TextStyles.interRegularH5
+              .copyWith(color: Colours.colorsButtonMenu),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: onBack,
@@ -52,7 +55,8 @@ class CaisseDetailsPage extends StatelessWidget {
           children: [
             Text(
               'ID de la caisse : ${caisseDetails.id}',
-              style: TextStyles.interBoldH6.copyWith(color: Colors.white),
+              style: TextStyles.interBoldH6
+                  .copyWith(color: Colours.colorsButtonMenu),
             ),
             const SizedBox(height: Units.sizedbox_10),
             Text(
@@ -101,12 +105,13 @@ class CaisseDetailsPage extends StatelessWidget {
                   Text(
                     'Date : ${transaction.transactionDate}',
                     style: TextStyles.interRegularBody1
-                        .copyWith(color: Colors.white),
+                        .copyWith(color: Colours.colorsButtonMenu),
                   ),
                   Text(
                     'Type : ${transaction.transactionType}',
-                    style: TextStyles.interRegularBody1
-                        .copyWith(color: Colors.white),
+                    style: TextStyles.interRegularBody1.copyWith(
+                      color: transaction.amount > 0 ? Colors.green : Colors.red,
+                    ),
                   ),
                 ],
               ),

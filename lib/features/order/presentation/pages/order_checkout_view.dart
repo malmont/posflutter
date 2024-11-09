@@ -10,6 +10,8 @@ import 'package:pos_flutter/features/cart/application/blocs/cart_bloc.dart';
 import 'package:pos_flutter/features/cart/domain/entities/cart_item.dart';
 import 'package:pos_flutter/features/cart/presentation/widgets/input_form_button.dart';
 import 'package:pos_flutter/features/order/application/blocs/order_bloc/order_bloc.dart';
+import 'package:pos_flutter/features/order/application/blocs/revenu_statistique_bloc/revenue_statistics_bloc.dart';
+import 'package:pos_flutter/features/order/application/blocs/statistique_order/statistique_order_bloc.dart';
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/order/domain/entities/order_detail_response.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/order_type_selection.dart';
@@ -54,7 +56,14 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
                 .read<PaymentBloc>()
                 .add(const GetPayments(FilterOrderParams()));
             context.read<CaisseBloc>().add(const GetCaisse(days: 15));
-            context.read<OrderBloc>().add(const GetOrders(FilterOrderParams()));
+            context.read<OrderBloc>().add(
+                const GetOrders(FilterOrderParams(orderSource: 2, days: 1)));
+            context
+                .read<StatistiqueOrderBloc>()
+                .add(const GetStatistiqueOrder());
+            context
+                .read<RevenueStatisticsBloc>()
+                .add(const GetRevenueStatistics());
 
             EasyLoading.showSuccess("Order Placed Successfully");
           } else if (state is OrderAddFailure) {

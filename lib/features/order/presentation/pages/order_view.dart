@@ -4,8 +4,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pos_flutter/features/order/application/blocs/order_bloc/order_bloc.dart';
 import 'package:pos_flutter/features/order/application/blocs/revenu_statistique_bloc/revenue_statistics_bloc.dart';
 import 'package:pos_flutter/features/order/application/blocs/statistique_order/statistique_order_bloc.dart';
-
-import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/order/domain/entities/order_details.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/orders_list_page.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/order_details_page.dart';
@@ -22,15 +20,15 @@ class OrderView extends StatefulWidget {
 class _OrderViewState extends State<OrderView> {
   OrderDetails? selectedOrder;
 
-  @override
-  void initState() {
-    super.initState();
-    context
-        .read<OrderBloc>()
-        .add(const GetOrders(FilterOrderParams(orderSource: 2, days: 1)));
-    context.read<StatistiqueOrderBloc>().add(const GetStatistiqueOrder());
-    context.read<RevenueStatisticsBloc>().add(const GetRevenueStatistics());
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   context
+  //       .read<OrderBloc>()
+  //       .add(const GetOrders(FilterOrderParams(orderSource: 2, days: 1)));
+  //   context.read<StatistiqueOrderBloc>().add(const GetStatistiqueOrder());
+  //   context.read<RevenueStatisticsBloc>().add(const GetRevenueStatistics());
+  // }
 
   void navigateToDetails(OrderDetails order) {
     setState(() {
@@ -76,8 +74,6 @@ class _OrderViewState extends State<OrderView> {
                           child: Text('Échec du chargement des commandes.'),
                         );
                       }
-
-                      // Placeholder when no orders or no state match
                       return ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         itemCount: 6,
@@ -106,16 +102,23 @@ class _OrderViewState extends State<OrderView> {
                 return BlocBuilder<RevenueStatisticsBloc,
                     RevenueStatisticsState>(
                   builder: (context, revenueState) {
-                    return StatistiquePageView(
-                      statistiqueOrderModel:
-                          statistiqueState is StatistiqueOrderLoadSuccess
-                              ? statistiqueState.statistiqueOrderModel
-                              : null,
-                      revenueStatisticsModel:
-                          revenueState is RevenueStatisticsLoadSuccess
-                              ? revenueState.revenueStatisticsModel
-                              : null,
-                    );
+                    if (revenueState is RevenueStatisticsLoadInProgress ||
+                        statistiqueState is StatistiqueOrderLoadInProgress) {
+                      EasyLoading.show(
+                          status: 'Chargement des statistiques...');
+                    } else {
+                      EasyLoading.dismiss();
+                    }
+                    if (statistiqueState is StatistiqueOrderLoadSuccess &&
+                        revenueState is RevenueStatisticsLoadSuccess) {
+                      EasyLoading.dismiss();
+                      return StatistiquePageView(
+                          statistiqueOrderModel:
+                              statistiqueState.statistiqueOrderModel,
+                          revenueStatisticsModel:
+                              revenueState.revenueStatisticsModel);
+                    }
+                    return const SizedBox();
                   },
                 );
               },
