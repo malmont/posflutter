@@ -126,7 +126,7 @@ import 'package:pos_flutter/features/order/domain/usecases/get_remote_statistiqu
     as _i966;
 import 'package:pos_flutter/features/order/infrastucture/repositories/order_repository_impl.dart'
     as _i263;
-import 'package:pos_flutter/features/payment/application/blocs/payment_bloc.dart'
+import 'package:pos_flutter/features/payment/application/blocs/Payment_bloc/payment_bloc.dart'
     as _i305;
 import 'package:pos_flutter/features/payment/domain/repositories/payment_repository.dart'
     as _i660;

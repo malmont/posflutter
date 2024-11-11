@@ -19,7 +19,7 @@ import 'package:pos_flutter/features/authentification/application/viewmodels/sig
 import 'package:pos_flutter/features/authentification/presentation/pages/sign_in_view_page.dart';
 import 'package:pos_flutter/features/home/presentation/pages/MainViewPage.dart';
 
-import 'features/payment/application/blocs/payment_bloc.dart';
+import 'features/payment/application/blocs/Payment_bloc/payment_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

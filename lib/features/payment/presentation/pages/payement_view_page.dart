@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pos_flutter/features/payment/presentation/widgets/payments_list_page_view.dart';
 
-import '../../application/blocs/payment_bloc.dart';
+import '../../application/blocs/Payment_bloc/payment_bloc.dart';
 
 class PaymentViewPage extends StatefulWidget {
   const PaymentViewPage({super.key});

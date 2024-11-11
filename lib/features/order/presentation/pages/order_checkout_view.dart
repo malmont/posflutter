@@ -17,7 +17,7 @@ import 'package:pos_flutter/features/order/domain/entities/order_detail_response
 import 'package:pos_flutter/features/order/presentation/widgets/order_type_selection.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/outline_label_card.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/payment_method_selection.dart';
-import 'package:pos_flutter/features/payment/application/blocs/payment_bloc.dart';
+import 'package:pos_flutter/features/payment/application/blocs/Payment_bloc/payment_bloc.dart';
 
 class OrderCheckoutView extends StatefulWidget {
   final VoidCallback onOrderPlaced;

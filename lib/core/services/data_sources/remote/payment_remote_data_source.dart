@@ -3,9 +3,11 @@ import 'package:pos_flutter/core/error/exeptions.dart';
 import 'package:pos_flutter/core/services/api/payment_api_client.dart';
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/payment/infrastucture/models/payment_details_model.dart';
+import 'package:pos_flutter/features/payment/infrastucture/models/payments_statistics_model.dart';
 
 abstract class PaymentRemoteDataSource {
   Future<List<PaymentDetailsModel>> getPayments(FilterOrderParams params);
+  Future<PaymentsStatisticsModel> getPaymentStatistique();
 }
 
 @LazySingleton(as: PaymentRemoteDataSource)
@@ -27,6 +29,16 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
         orderSource,
         days,
       );
+      return response;
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<PaymentsStatisticsModel> getPaymentStatistique() async {
+    try {
+      final response = await apiClient.getPaymentStatistique();
       return response;
     } catch (e) {
       throw ServerException();
