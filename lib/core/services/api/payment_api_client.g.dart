@@ -77,7 +77,7 @@ class _PaymentApiClient implements PaymentApiClient {
     )
         .compose(
           _dio.options,
-          '/statistiques/chiffre-affaires/pos',
+          '/payments/statistics/pos',
           queryParameters: queryParameters,
           data: _data,
         )

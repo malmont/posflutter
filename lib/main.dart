@@ -8,6 +8,7 @@ import 'package:pos_flutter/features/order/application/blocs/order_bloc/order_bl
 import 'package:pos_flutter/features/order/application/blocs/revenu_statistique_bloc/revenue_statistics_bloc.dart';
 import 'package:pos_flutter/features/order/application/blocs/statistique_order/statistique_order_bloc.dart';
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
+import 'package:pos_flutter/features/payment/application/blocs/payment_statistic_bloc/payment_statistic_bloc.dart';
 import 'package:pos_flutter/features/products/application/blocs/product_bloc.dart';
 import 'package:pos_flutter/features/products/domain/entities/product/filter_product_params.dart';
 import 'package:provider/provider.dart' as provider;
@@ -61,6 +62,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) =>
               getIt<RevenueStatisticsBloc>()..add(const GetRevenueStatistics()),
+        ),
+        BlocProvider(
+          create: (context) => getIt<PaymentStatisticBlocBloc>()
+            ..add(const GetPaymentStatistic()),
         ),
         BlocProvider(
           create: (context) =>
