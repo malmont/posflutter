@@ -127,11 +127,19 @@ import 'package:pos_flutter/features/order/domain/usecases/get_remote_statistiqu
 import 'package:pos_flutter/features/order/infrastucture/repositories/order_repository_impl.dart'
     as _i263;
 import 'package:pos_flutter/features/payment/application/blocs/Payment_bloc/payment_bloc.dart'
-    as _i305;
+    as _i145;
+import 'package:pos_flutter/features/payment/application/blocs/payment_statistic_bloc/payment_statistic_bloc.dart'
+    as _i58;
 import 'package:pos_flutter/features/payment/domain/repositories/payment_repository.dart'
     as _i660;
+import 'package:pos_flutter/features/payment/domain/usecases/clear_cached_payment_statistic_useCase.dart'
+    as _i874;
+import 'package:pos_flutter/features/payment/domain/usecases/get_cached_payment_statistic_useCase.dart'
+    as _i564;
 import 'package:pos_flutter/features/payment/domain/usecases/get_cached_payment_usecase.dart'
     as _i974;
+import 'package:pos_flutter/features/payment/domain/usecases/get_remote_payment_statistic_useCase.dart'
+    as _i880;
 import 'package:pos_flutter/features/payment/domain/usecases/get_remote_payment_usecase.dart'
     as _i510;
 import 'package:pos_flutter/features/payment/infrastucture/repositories/payment_repository_impl.dart'
@@ -281,6 +289,13 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i510.GetRemotePaymentUsecase(gh<_i660.PaymentRepository>()));
     gh.lazySingleton<_i974.GetCachedPaymentUsecase>(
         () => _i974.GetCachedPaymentUsecase(gh<_i660.PaymentRepository>()));
+    gh.lazySingleton<_i564.GetCachedPaymentStatisticUsecase>(() =>
+        _i564.GetCachedPaymentStatisticUsecase(gh<_i660.PaymentRepository>()));
+    gh.lazySingleton<_i874.ClearCachedPaymentStatisticUseCase>(() =>
+        _i874.ClearCachedPaymentStatisticUseCase(
+            gh<_i660.PaymentRepository>()));
+    gh.lazySingleton<_i880.GetRemotePaymentStatisticUsecase>(() =>
+        _i880.GetRemotePaymentStatisticUsecase(gh<_i660.PaymentRepository>()));
     gh.lazySingleton<_i434.AddOrderUseCase>(
         () => _i434.AddOrderUseCase(gh<_i342.OrderRepository>()));
     gh.lazySingleton<_i555.GetRemoteOrdersUseCase>(
@@ -315,6 +330,12 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i117.ProductBloc>(
         () => _i117.ProductBloc(gh<_i323.GetProductUseCase>()));
+    gh.factory<_i58.PaymentStatisticBlocBloc>(
+        () => _i58.PaymentStatisticBlocBloc(
+              gh<_i880.GetRemotePaymentStatisticUsecase>(),
+              gh<_i564.GetCachedPaymentStatisticUsecase>(),
+              gh<_i874.ClearCachedPaymentStatisticUseCase>(),
+            ));
     gh.lazySingleton<_i951.DepositCaisseUseCase>(
         () => _i951.DepositCaisseUseCase(gh<_i402.CaisseRepository>()));
     gh.lazySingleton<_i925.OpenCaisseUseCase>(
@@ -349,7 +370,7 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i767.ClearLocalOrdersUseCase>(),
           gh<_i434.AddOrderUseCase>(),
         ));
-    gh.factory<_i305.PaymentBloc>(() => _i305.PaymentBloc(
+    gh.factory<_i145.PaymentBloc>(() => _i145.PaymentBloc(
           gh<_i510.GetRemotePaymentUsecase>(),
           gh<_i974.GetCachedPaymentUsecase>(),
         ));

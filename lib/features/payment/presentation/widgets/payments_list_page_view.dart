@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/dashboard_card.dart';
 import 'package:pos_flutter/features/payment/application/blocs/Payment_bloc/payment_bloc.dart';
+import 'package:pos_flutter/features/payment/application/blocs/payment_statistic_bloc/payment_statistic_bloc.dart';
 import 'package:pos_flutter/features/payment/domain/entities/payment_details.dart';
 import 'package:pos_flutter/features/products/presentation/widgets/generic_list.dart';
 
@@ -53,30 +55,62 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
       ),
       body: Column(
         children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: DashboardCard(
-                  title: "titre",
-                  icon: Icons.attach_money,
-                  currentValue: '5000',
-                  currentLabel: 'Total amount',
-                  lastValue: '4000',
-                  lastLabel: 'Last month',
-                ),
-              ),
-              Expanded(
-                child: DashboardCard(
-                  title: "titre",
-                  icon: Icons.credit_card,
-                  currentValue: '2000',
-                  currentLabel: 'Total amount',
-                  lastValue: '1500',
-                  lastLabel: 'Last month',
-                ),
-              ),
-            ],
+          BlocBuilder<PaymentStatisticBlocBloc, PaymentStatisticBlocState>(
+            builder: (context, state) {
+              if (state is PaymentStatisticLoading) {
+                EasyLoading.show(status: 'Chargement des statistiques...');
+              } else {
+                EasyLoading.dismiss();
+              }
+
+              if (state is PaymentStatisticSuccess) {
+                final currentMonth = state.paymentsStatisticsModel.currentMonth;
+                final currentWeek = state.paymentsStatisticsModel.currentWeek;
+                final currentYear = state.paymentsStatisticsModel.currentYear;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: DashboardCard(
+                        title: "Current Week",
+                        icon: Icons.credit_card,
+                        currentValue:
+                            currentWeek.paymentClient.total.toString(),
+                        currentLabel: 'Total amount',
+                        lastValue:
+                            currentWeek.remboursementClient.total.toString(),
+                        lastLabel: 'Last month',
+                      ),
+                    ),
+                    Expanded(
+                      child: DashboardCard(
+                        title: "Current Month",
+                        icon: Icons.credit_card,
+                        currentValue:
+                            '\$${(currentMonth.paiementClient / 100).toStringAsFixed(2)}',
+                        currentLabel: 'Total amount',
+                        lastValue:
+                            '\$${(currentMonth.remboursementClient / 100).toStringAsFixed(2)}',
+                        lastLabel: 'Last month',
+                      ),
+                    ),
+                    Expanded(
+                      child: DashboardCard(
+                        title: "Current Year",
+                        icon: Icons.credit_card,
+                        currentValue:
+                            '\$${(currentYear.paiementClient / 100).toStringAsFixed(2)}',
+                        currentLabel: 'Total amount',
+                        lastValue:
+                            '\$${(currentYear.remboursementClient / 100).toStringAsFixed(2)}',
+                        lastLabel: 'Last month',
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox();
+            },
           ),
           GenericList<DaySelection>(
             items: daySelections,
