@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:pos_flutter/features/payment/infrastucture/models/payment_details_model.dart';
+import 'package:pos_flutter/features/payment/infrastucture/models/payments_statistics_model.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
@@ -14,4 +15,7 @@ abstract class PaymentApiClient {
     @Query('orderSource') int? orderSource,
     @Query('days') int days,
   );
+
+  @GET('/payments/statistics/pos')
+  Future<PaymentsStatisticsModel> getPaymentStatistique();
 }

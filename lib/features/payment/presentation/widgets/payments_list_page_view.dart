@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/dashboard_card.dart';
-import 'package:pos_flutter/features/payment/application/blocs/payment_bloc.dart';
+import 'package:pos_flutter/features/payment/application/blocs/Payment_bloc/payment_bloc.dart';
 import 'package:pos_flutter/features/payment/domain/entities/payment_details.dart';
 import 'package:pos_flutter/features/products/presentation/widgets/generic_list.dart';
 

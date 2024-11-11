@@ -23,7 +23,6 @@ class DailyOrderCountModel extends DailyOrderCount {
     };
   }
 
-  // Conversion depuis une entité de type DailyOrderCount
   factory DailyOrderCountModel.fromEntity(DailyOrderCount entity) {
     return DailyOrderCountModel(
       date: entity.date,
