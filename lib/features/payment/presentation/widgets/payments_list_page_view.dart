@@ -75,11 +75,11 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
                         title: "Current Week",
                         icon: Icons.credit_card,
                         currentValue:
-                            currentWeek.paymentClient.total.toString(),
-                        currentLabel: 'Total amount',
+                            '\$${(currentWeek.paymentClient.total / 100).toStringAsFixed(2)}',
+                        currentLabel: 'Paiement total',
                         lastValue:
-                            currentWeek.remboursementClient.total.toString(),
-                        lastLabel: 'Last month',
+                            '\$${(currentWeek.remboursementClient.total / 100).toStringAsFixed(2)}',
+                        lastLabel: 'remboursement total',
                       ),
                     ),
                     Expanded(
@@ -88,10 +88,10 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
                         icon: Icons.credit_card,
                         currentValue:
                             '\$${(currentMonth.paiementClient / 100).toStringAsFixed(2)}',
-                        currentLabel: 'Total amount',
+                        currentLabel: 'Paiement total',
                         lastValue:
                             '\$${(currentMonth.remboursementClient / 100).toStringAsFixed(2)}',
-                        lastLabel: 'Last month',
+                        lastLabel: 'remboursement total',
                       ),
                     ),
                     Expanded(
@@ -100,10 +100,10 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
                         icon: Icons.credit_card,
                         currentValue:
                             '\$${(currentYear.paiementClient / 100).toStringAsFixed(2)}',
-                        currentLabel: 'Total amount',
+                        currentLabel: 'Paiement total',
                         lastValue:
                             '\$${(currentYear.remboursementClient / 100).toStringAsFixed(2)}',
-                        lastLabel: 'Last month',
+                        lastLabel: 'remboursement total',
                       ),
                     ),
                   ],
