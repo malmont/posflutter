@@ -21,11 +21,11 @@ class OrderTypeSelection extends StatelessWidget {
       children: [
         Text(
           "Type Order",
-          style: TextStyles.interBoldH6.copyWith(
+          style: TextStyles.interBoldBody2.copyWith(
             color: Colours.white,
           ),
         ),
-        const SizedBox(height: Units.sizedbox_10),
+        const SizedBox(height: Units.sizedbox_8),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(

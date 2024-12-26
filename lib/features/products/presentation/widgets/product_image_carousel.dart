@@ -20,7 +20,7 @@ class ProductImageCarousel extends StatelessWidget {
     return CarouselSlider(
       items: [
         Container(
-          width: 350,
+          width: 250,
           decoration: BoxDecoration(
             color: Colors.grey.shade200,
             borderRadius: BorderRadius.circular(20.0),
@@ -33,14 +33,14 @@ class ProductImageCarousel extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.0),
                 image: DecorationImage(
                   image: imageProvider,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
             ),
           ),
         ),
         Container(
-          width: 450,
+          width: 330,
           decoration: BoxDecoration(
             color: Colors.grey.shade200,
             borderRadius: BorderRadius.circular(20.0),
@@ -61,7 +61,7 @@ class ProductImageCarousel extends StatelessWidget {
         ),
       ],
       options: CarouselOptions(
-        height: 500,
+        height: 285,
         viewportFraction: 1.0,
         enlargeCenterPage: true,
         onPageChanged: (index, reason) => onPageChanged(index),

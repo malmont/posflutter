@@ -85,7 +85,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
             ),
           ),
           body: Padding(
-            padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
+            padding: const EdgeInsets.all(Units.edgeInsetsLarge),
             child: ListView(
               physics: const BouncingScrollPhysics(),
               children: [
@@ -98,7 +98,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
                   },
                 ),
                 const SizedBox(
-                  height: Units.edgeInsetsXXLarge,
+                  height: Units.edgeInsetsLarge,
                 ),
                 PaymentMethodSelection(
                   selectedMethodId: selectedPaymentMethodId,

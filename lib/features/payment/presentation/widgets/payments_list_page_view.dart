@@ -3,10 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/dashboard_card.dart';
+import 'package:pos_flutter/features/order/presentation/widgets/day_selection_card.dart';
 import 'package:pos_flutter/features/payment/application/blocs/Payment_bloc/payment_bloc.dart';
 import 'package:pos_flutter/features/payment/application/blocs/payment_statistic_bloc/payment_statistic_bloc.dart';
 import 'package:pos_flutter/features/payment/domain/entities/payment_details.dart';
 import 'package:pos_flutter/features/products/presentation/widgets/generic_list.dart';
+import 'package:pos_flutter/widget/detail_row.dart';
+import 'package:pos_flutter/widget/header_row.dart';
+import 'package:pos_flutter/widget/status_row.dart';
 
 import '../../../../design/design.dart';
 
@@ -35,6 +39,33 @@ final List<DaySelection> daySelections = [
 ];
 
 class _PaymentsListPageState extends State<PaymentsListPage> {
+  final ScrollController _scrollController = ScrollController();
+  bool _showTopSection = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_handleScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _handleScroll() {
+    if (_scrollController.position.pixels > 150 && _showTopSection) {
+      setState(() {
+        _showTopSection = false;
+      });
+    } else if (_scrollController.position.pixels <= 50 && !_showTopSection) {
+      setState(() {
+        _showTopSection = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,91 +86,95 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
       ),
       body: Column(
         children: [
-          BlocBuilder<PaymentStatisticBlocBloc, PaymentStatisticBlocState>(
-            builder: (context, state) {
-              if (state is PaymentStatisticLoading) {
-                EasyLoading.show(status: 'Chargement des statistiques...');
-              } else {
-                EasyLoading.dismiss();
-              }
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            height: _showTopSection ? null : 0,
+            child: Column(
+              children: [
+                BlocBuilder<PaymentStatisticBlocBloc,
+                    PaymentStatisticBlocState>(
+                  builder: (context, state) {
+                    if (state is PaymentStatisticLoading) {
+                      EasyLoading.show(
+                          status: 'Chargement des statistiques...');
+                    } else {
+                      EasyLoading.dismiss();
+                    }
 
-              if (state is PaymentStatisticSuccess) {
-                final currentMonth = state.paymentsStatisticsModel.currentMonth;
-                final currentWeek = state.paymentsStatisticsModel.currentWeek;
-                final currentYear = state.paymentsStatisticsModel.currentYear;
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: DashboardCard(
-                        title: "Current Week",
-                        icon: Icons.credit_card,
-                        currentValue:
-                            '\$${(currentWeek.paymentClient.total / 100).toStringAsFixed(2)}',
-                        currentLabel: 'Paiement total',
-                        lastValue:
-                            '\$${(currentWeek.remboursementClient.total / 100).toStringAsFixed(2)}',
-                        lastLabel: 'remboursement total',
-                      ),
-                    ),
-                    Expanded(
-                      child: DashboardCard(
-                        title: "Current Month",
-                        icon: Icons.credit_card,
-                        currentValue:
-                            '\$${(currentMonth.paiementClient / 100).toStringAsFixed(2)}',
-                        currentLabel: 'Paiement total',
-                        lastValue:
-                            '\$${(currentMonth.remboursementClient / 100).toStringAsFixed(2)}',
-                        lastLabel: 'remboursement total',
-                      ),
-                    ),
-                    Expanded(
-                      child: DashboardCard(
-                        title: "Current Year",
-                        icon: Icons.credit_card,
-                        currentValue:
-                            '\$${(currentYear.paiementClient / 100).toStringAsFixed(2)}',
-                        currentLabel: 'Paiement total',
-                        lastValue:
-                            '\$${(currentYear.remboursementClient / 100).toStringAsFixed(2)}',
-                        lastLabel: 'remboursement total',
-                      ),
-                    ),
-                  ],
-                );
-              }
-              return const SizedBox();
-            },
-          ),
-          GenericList<DaySelection>(
-            items: daySelections,
-            selectedIndex: selectedDayIndex,
-            onItemSelected: (index) {
-              setState(() {
-                selectedDayIndex = index;
-                final selectedDays = daySelections[index].days;
-                context.read<PaymentBloc>().add(GetPayments(
-                      FilterOrderParams(days: selectedDays),
-                    ));
-              });
-            },
-            itemBuilder: (daySelection, isSelected) => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: isSelected ? Colours.colorsButtonMenu : Colors.grey[200],
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                daySelection.name,
-                style: TextStyles.interBoldH6.copyWith(
-                  color: isSelected ? Colors.white : Colors.black,
+                    if (state is PaymentStatisticSuccess) {
+                      final currentMonth =
+                          state.paymentsStatisticsModel.currentMonth;
+                      final currentWeek =
+                          state.paymentsStatisticsModel.currentWeek;
+                      final currentYear =
+                          state.paymentsStatisticsModel.currentYear;
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: DashboardCard(
+                              title: "Current Week",
+                              icon: Icons.credit_card,
+                              currentValue:
+                                  '\$${(currentWeek.paymentClient.total / 100).toStringAsFixed(2)}',
+                              currentLabel: 'Paiement total',
+                              lastValue:
+                                  '\$${(currentWeek.remboursementClient.total / 100).toStringAsFixed(2)}',
+                              lastLabel: 'remboursement total',
+                            ),
+                          ),
+                          Expanded(
+                            child: DashboardCard(
+                              title: "Current Month",
+                              icon: Icons.credit_card,
+                              currentValue:
+                                  '\$${(currentMonth.paiementClient / 100).toStringAsFixed(2)}',
+                              currentLabel: 'Paiement total',
+                              lastValue:
+                                  '\$${(currentMonth.remboursementClient / 100).toStringAsFixed(2)}',
+                              lastLabel: 'remboursement total',
+                            ),
+                          ),
+                          Expanded(
+                            child: DashboardCard(
+                              title: "Current Year",
+                              icon: Icons.credit_card,
+                              currentValue:
+                                  '\$${(currentYear.paiementClient / 100).toStringAsFixed(2)}',
+                              currentLabel: 'Paiement total',
+                              lastValue:
+                                  '\$${(currentYear.remboursementClient / 100).toStringAsFixed(2)}',
+                              lastLabel: 'remboursement total',
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                    return const SizedBox();
+                  },
                 ),
-              ),
+                GenericList<DaySelection>(
+                  items: daySelections,
+                  selectedIndex: selectedDayIndex,
+                  onItemSelected: (index) {
+                    setState(() {
+                      selectedDayIndex = index;
+                      final selectedDays = daySelections[index].days;
+                      context.read<PaymentBloc>().add(GetPayments(
+                            FilterOrderParams(days: selectedDays),
+                          ));
+                    });
+                  },
+                  itemBuilder: (daySelection, isSelected) => DaySelectionCard(
+                    name: daySelection.name,
+                    isSelected: isSelected,
+                  ),
+                ),
+
+                // Displaying the payments list
+              ],
             ),
           ),
-          // Displaying the payments list
           Expanded(
             child: widget.payments.isEmpty
                 ? Center(
@@ -151,6 +186,7 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
                     ),
                   )
                 : ListView.builder(
+                    controller: _scrollController,
                     itemCount: widget.payments.length,
                     itemBuilder: (context, index) {
                       final payment = widget.payments[index];
@@ -162,12 +198,14 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
                           color: Colours.primaryPalette,
                           elevation: 5,
                           margin: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
+                              vertical: Units.edgeInsetsLarge,
+                              horizontal: Units.edgeInsetsLarge),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding:
+                                const EdgeInsets.all(Units.edgeInsetsLarge),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -181,10 +219,12 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
                                 _buildDetailsRow(
                                     'Date',
                                     payment.paymentDate.toString(),
-                                    Colors.grey),
+                                    Colours.colorsButtonMenu),
                                 const SizedBox(width: 20),
-                                _buildDetailsRow('TypePayment',
-                                    payment.paymentMethod, Colors.grey),
+                                _buildDetailsRow(
+                                    'TypePayment',
+                                    payment.paymentMethod,
+                                    Colours.colorsButtonMenu),
                                 const SizedBox(width: 20),
                                 _buildStatusRow(payment),
                               ],
@@ -201,76 +241,31 @@ class _PaymentsListPageState extends State<PaymentsListPage> {
   }
 
   Widget _buildHeaderRow(PaymentDetails payment) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Payment ID: ${payment.id}',
-          style: TextStyles.interBoldH6.copyWith(color: Colors.white),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          payment.orderReference,
-          style: TextStyles.interSemiBoldBody1
-              .copyWith(color: Colours.colorsButtonMenu),
-        ),
-      ],
+    return HeaderRow(
+      title: 'Payment ID: ${payment.id}',
+      subtitle: payment.orderReference,
+      titleStyle: TextStyles.interBoldBody1.copyWith(color: Colors.white),
+      subtitleStyle: TextStyles.interRegularBody1
+          .copyWith(color: Colours.colorsButtonMenu),
     );
   }
 
   Widget _buildDetailsRow(String label, String value, Color valueColor) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyles.interSemiBoldBody1.copyWith(color: Colors.white),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: TextStyles.interSemiBoldBody1
-              .copyWith(color: Colours.colorsButtonMenu),
-        ),
-      ],
+    return DetailsRow(
+      label: label,
+      value: value,
+      labelStyle: TextStyles.interRegularBody1.copyWith(color: Colors.white),
+      valueStyle: TextStyles.interRegularBody1.copyWith(color: valueColor),
     );
   }
 
   Widget _buildStatusRow(PaymentDetails payment) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Status',
-          style: TextStyles.interSemiBoldBody1.copyWith(color: Colors.white),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-          decoration: BoxDecoration(
-            color: _getStatusColor(payment.paymentStatus),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Text(
-            payment.paymentStatus,
-            style: const TextStyle(color: Colors.white, fontSize: 14),
-          ),
-        ),
-      ],
+    return StatusRow(
+      label: 'Status',
+      statusColor: payment.paymentStatus,
+      labelStyle: TextStyles.interRegularBody1.copyWith(color: Colors.white),
+      statusStyle: TextStyles.interRegularBody1.copyWith(color: Colors.white),
     );
-  }
-
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'Complété':
-        return Colors.green;
-      case 'En attente':
-        return Colors.orange;
-      case 'Échoué':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
   }
 }
 

@@ -33,18 +33,6 @@ class OrderDetailsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildOrderInfoCard(),
-            const SizedBox(height: Units.sizedbox_20),
-            Card(
-              color: Colours.primaryPalette,
-              child: Padding(
-                padding: const EdgeInsets.all(Units.edgeInsetsLarge),
-                child: Text(
-                  'Items',
-                  style: TextStyles.interBoldH6
-                      .copyWith(color: Colours.colorsButtonMenu),
-                ),
-              ),
-            ),
             const SizedBox(height: 10),
             Expanded(
               child: GridView.builder(
@@ -52,7 +40,7 @@ class OrderDetailsPage extends StatelessWidget {
                   crossAxisCount: 4,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
-                  childAspectRatio: 0.8,
+                  childAspectRatio: 0.4,
                 ),
                 itemCount: orderDetails.orderItems.length,
                 itemBuilder: (context, index) {
@@ -74,31 +62,31 @@ class OrderDetailsPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(Units.radiusXXXXLarge),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(Units.edgeInsetsXXXLarge),
+        padding: const EdgeInsets.all(Units.edgeInsetsXLarge),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildInfoColumn('Order Reference', orderDetails.reference),
+            _buildInfoRow('Order Reference', orderDetails.reference),
             const SizedBox(height: Units.sizedbox_10),
-            _buildInfoColumn('Total Amount',
+            _buildInfoRow('Total Amount',
                 '\$${orderDetails.totalAmount.toStringAsFixed(2)}'),
             const SizedBox(height: Units.sizedbox_10),
-            _buildInfoColumn('Order Date', orderDetails.orderDate),
+            _buildInfoRow('Order Date', orderDetails.orderDate),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoColumn(String label, String value) {
-    return Column(
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
           style: TextStyles.interBoldBody1.copyWith(color: Colors.white70),
         ),
-        const SizedBox(height: Units.xsmall),
         Text(
           value,
           style: TextStyles.interBoldBody1.copyWith(color: Colors.white),

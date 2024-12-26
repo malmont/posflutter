@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pos_flutter/design/design.dart';
 import 'package:pos_flutter/features/Caisse/application/blocs/caisse_bloc.dart';
 import 'package:pos_flutter/features/Caisse/domain/entities/caisse.dart';
+import 'package:pos_flutter/features/order/presentation/widgets/day_selection_card.dart';
 import 'package:pos_flutter/features/payment/presentation/widgets/payments_list_page_view.dart';
 import 'package:pos_flutter/features/products/presentation/widgets/generic_list.dart';
+import 'package:pos_flutter/widget/detail_row.dart';
+import 'package:pos_flutter/widget/header_row.dart';
 
 class CaisseListPage extends StatefulWidget {
   final List<Caisse> caisses;
@@ -53,19 +56,9 @@ class _CaisseListPageState extends State<CaisseListPage> {
                     );
               });
             },
-            itemBuilder: (daySelection, isSelected) => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: isSelected ? Colours.colorsButtonMenu : Colors.grey[200],
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                daySelection.name,
-                style: TextStyles.interBoldH6.copyWith(
-                  color: isSelected ? Colours.white : Colours.primary100,
-                ),
-              ),
+            itemBuilder: (daySelection, isSelected) => DaySelectionCard(
+              name: daySelection.name,
+              isSelected: isSelected,
             ),
           ),
           Expanded(
@@ -95,13 +88,13 @@ class _CaisseListPageState extends State<CaisseListPage> {
                             elevation: 5,
                             margin: const EdgeInsets.symmetric(
                                 vertical: Units.edgeInsetsLarge,
-                                horizontal: Units.edgeInsetsXXLarge),
+                                horizontal: Units.edgeInsetsLarge),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Padding(
                               padding:
-                                  const EdgeInsets.all(Units.edgeInsetsXXLarge),
+                                  const EdgeInsets.all(Units.edgeInsetsLarge),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -112,8 +105,10 @@ class _CaisseListPageState extends State<CaisseListPage> {
                                       '\$${(caisse.amountTotal / 100).toStringAsFixed(2)}',
                                       Colors.greenAccent),
                                   const SizedBox(width: Units.sizedbox_80),
-                                  _buildDetailsRow('Date de création',
-                                      caisse.createdAt, Colors.grey),
+                                  _buildDetailsRow(
+                                      'Date de création',
+                                      caisse.createdAt,
+                                      Colours.colorsButtonMenu),
                                 ],
                               ),
                             ),
@@ -129,38 +124,21 @@ class _CaisseListPageState extends State<CaisseListPage> {
   }
 
   Widget _buildHeaderRow(Caisse caisse) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Caisse ID: ${caisse.id}',
-          style: TextStyles.interBoldH6.copyWith(color: Colors.white),
-        ),
-        const SizedBox(height: Units.sizedbox_10),
-        Text(
-          caisse.isOpen ? 'Ouverte' : 'Fermée',
-          style: TextStyles.interRegularBody1
-              .copyWith(color: caisse.isOpen ? Colors.green : Colors.red),
-        ),
-      ],
+    return HeaderRow(
+      title: 'Caisse ID: ${caisse.id}',
+      subtitle: caisse.isOpen ? 'Ouverte' : 'Fermée',
+      titleStyle: TextStyles.interBoldBody1.copyWith(color: Colors.white),
+      subtitleStyle: TextStyles.interRegularBody1
+          .copyWith(color: caisse.isOpen ? Colors.green : Colors.red),
     );
   }
 
   Widget _buildDetailsRow(String label, String value, Color valueColor) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyles.interRegularBody1.copyWith(color: Colors.white),
-        ),
-        const SizedBox(height: Units.sizedbox_10),
-        Text(
-          value,
-          style: TextStyles.interRegularBody1
-              .copyWith(color: Colours.colorsButtonMenu),
-        ),
-      ],
+    return DetailsRow(
+      label: label,
+      value: value,
+      labelStyle: TextStyles.interRegularBody1.copyWith(color: Colors.white),
+      valueStyle: TextStyles.interRegularBody1.copyWith(color: valueColor),
     );
   }
 }

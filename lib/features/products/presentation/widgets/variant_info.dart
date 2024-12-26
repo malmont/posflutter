@@ -19,13 +19,13 @@ class VariantInfo extends StatelessWidget {
           children: [
             Text(
               "Couleur",
-              style: TextStyles.interRegularH5.copyWith(
+              style: TextStyles.interBoldBody1.copyWith(
                 color: Colours.primaryPalette,
               ),
             ),
             Text(
               ' ${selectedVariant.color.name}',
-              style: TextStyles.interRegularH6.copyWith(
+              style: TextStyles.interBoldBody1.copyWith(
                 color: Colours.colorsButtonMenu,
               ),
             ),
@@ -36,13 +36,13 @@ class VariantInfo extends StatelessWidget {
           children: [
             Text(
               "Taille",
-              style: TextStyles.interRegularH5.copyWith(
+              style: TextStyles.interBoldBody1.copyWith(
                 color: Colours.primaryPalette,
               ),
             ),
             Text(
               selectedVariant.size.name,
-              style: TextStyles.interRegularH6.copyWith(
+              style: TextStyles.interBoldBody1.copyWith(
                 color: Colours.colorsButtonMenu,
               ),
             ),
@@ -54,13 +54,13 @@ class VariantInfo extends StatelessWidget {
           children: [
             Text(
               "Quantité en stock",
-              style: TextStyles.interRegularH5.copyWith(
+              style: TextStyles.interBoldBody1.copyWith(
                 color: Colours.primaryPalette,
               ),
             ),
             Text(
               '${selectedVariant.stockQuantity}',
-              style: TextStyles.interRegularH6.copyWith(
+              style: TextStyles.interBoldBody1.copyWith(
                 color: Colours.colorsButtonMenu,
               ),
             ),

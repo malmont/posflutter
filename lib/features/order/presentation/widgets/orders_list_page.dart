@@ -8,14 +8,21 @@ import 'package:pos_flutter/features/order/application/blocs/statistique_order/s
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/order/domain/entities/order_details.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/dashboard_card.dart';
+import 'package:pos_flutter/features/order/presentation/widgets/day_selection_card.dart';
 import 'package:pos_flutter/features/products/presentation/widgets/generic_list.dart';
+import 'package:pos_flutter/widget/detail_row.dart';
+import 'package:pos_flutter/widget/header_row.dart';
+import 'package:pos_flutter/widget/status_row.dart';
 
 class OrdersListPage extends StatefulWidget {
   final List<OrderDetails> orders;
   final Function(OrderDetails) onSelectOrder;
 
-  const OrdersListPage(
-      {super.key, required this.orders, required this.onSelectOrder});
+  const OrdersListPage({
+    super.key,
+    required this.orders,
+    required this.onSelectOrder,
+  });
 
   @override
   State<OrdersListPage> createState() => _OrdersListPageState();
@@ -32,6 +39,33 @@ final List<DaySelection> daySelections = [
 ];
 
 class _OrdersListPageState extends State<OrdersListPage> {
+  final ScrollController _scrollController = ScrollController();
+  bool _showTopSection = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_handleScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _handleScroll() {
+    if (_scrollController.position.pixels > 150 && _showTopSection) {
+      setState(() {
+        _showTopSection = false;
+      });
+    } else if (_scrollController.position.pixels <= 50 && !_showTopSection) {
+      setState(() {
+        _showTopSection = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,161 +84,183 @@ class _OrdersListPageState extends State<OrdersListPage> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          BlocBuilder<StatistiqueOrderBloc, StatistiqueOrderState>(
-            builder: (context, statistiqueState) {
-              return BlocBuilder<RevenueStatisticsBloc, RevenueStatisticsState>(
-                builder: (context, revenueState) {
-                  if (revenueState is RevenueStatisticsLoadInProgress ||
-                      statistiqueState is StatistiqueOrderLoadInProgress) {
-                    EasyLoading.show(status: 'Chargement des statistiques...');
-                  } else {
-                    EasyLoading.dismiss();
-                  }
+          Column(
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                height: _showTopSection ? null : 0,
+                child: Column(
+                  children: [
+                    BlocBuilder<StatistiqueOrderBloc, StatistiqueOrderState>(
+                      builder: (context, statistiqueState) {
+                        return BlocBuilder<RevenueStatisticsBloc,
+                            RevenueStatisticsState>(
+                          builder: (context, revenueState) {
+                            if (revenueState
+                                    is RevenueStatisticsLoadInProgress ||
+                                statistiqueState
+                                    is StatistiqueOrderLoadInProgress) {
+                              EasyLoading.show(
+                                  status: 'Chargement des statistiques...');
+                            } else {
+                              EasyLoading.dismiss();
+                            }
 
-                  if (statistiqueState is StatistiqueOrderLoadSuccess &&
-                      revenueState is RevenueStatisticsLoadSuccess) {
-                    EasyLoading.dismiss();
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: DashboardCard(
-                            title: "Chiffres d'affaires",
-                            icon: Icons.monetization_on,
-                            currentValue:
-                                '\$${(revenueState.revenueStatisticsModel.currentWeekRevenue / 100).toStringAsFixed(2)}',
-                            currentLabel: "semaine en cours",
-                            lastValue:
-                                '\$${(revenueState.revenueStatisticsModel.lastWeekRevenue / 100).toStringAsFixed(2)}',
-                            lastLabel: 'Semaine dernière',
-                          ),
-                        ),
-                        Expanded(
-                          child: DashboardCard(
-                            title: "Commandes",
-                            icon: Icons.shopping_cart,
-                            currentValue: statistiqueState.statistiqueOrderModel
-                                .currentWeekCountAchatClientCompletee
-                                .toString(),
-                            currentLabel: 'semaine en cours',
-                            lastValue: statistiqueState.statistiqueOrderModel
-                                .lastWeekCountAchatClientCompletee
-                                .toString(),
-                            lastLabel: 'semaine dernière',
-                          ),
-                        ),
-                        Expanded(
-                          child: DashboardCard(
-                            title: "Annulation",
-                            icon: Icons.cancel,
-                            currentValue: statistiqueState.statistiqueOrderModel
-                                .currentWeekCountAchatClientAnnulation
-                                .toString(),
-                            currentLabel: 'semaine en cours',
-                            lastValue: statistiqueState.statistiqueOrderModel
-                                .lastWeekCountAchatClientAnnulation
-                                .toString(),
-                            lastLabel: 'Semaine dernière',
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  return const SizedBox();
-                },
-              );
-            },
-          ),
-          GenericList<DaySelection>(
-            items: daySelections,
-            selectedIndex: selectedDayIndex,
-            onItemSelected: (index) {
-              setState(() {
-                selectedDayIndex = index;
-                final selectedDays = daySelections[index].days;
-                context.read<OrderBloc>().add(GetOrders(
-                      FilterOrderParams(
-                        orderSource: 2,
-                        days: daySelections[index].days,
-                      ),
-                    ));
-              });
-            },
-            itemBuilder: (daySelection, isSelected) => Container(
-              margin: const EdgeInsets.symmetric(
-                  horizontal: Units.edgeInsetsXLarge,
-                  vertical: Units.edgeInsetsXLarge),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Units.radiusXXLarge),
-                color:
-                    isSelected ? Colours.colorsButtonMenu : Colours.primary100,
-              ),
-              padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
-              child: Text(
-                daySelection.name,
-                style: TextStyles.interBoldH6.copyWith(
-                  color: isSelected ? Colours.primary100 : Colours.white,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              height: double.infinity,
-              color: Colours.primary100,
-              child: widget.orders.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Pas de commandes aujourd\'hui',
-                        style: TextStyles.interRegularH5.copyWith(
-                          color: Colours.colorsButtonMenu,
-                        ),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: widget.orders.length,
-                      itemBuilder: (context, index) {
-                        final order = widget.orders[index];
-                        return GestureDetector(
-                          onTap: () {
-                            widget.onSelectOrder(order);
-                          },
-                          child: Card(
-                            color: Colours.primaryPalette,
-                            elevation: 5,
-                            margin: const EdgeInsets.symmetric(
-                                vertical: Units.edgeInsetsLarge,
-                                horizontal: Units.edgeInsetsXXLarge),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.all(Units.edgeInsetsXXLarge),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                            if (statistiqueState
+                                    is StatistiqueOrderLoadSuccess &&
+                                revenueState is RevenueStatisticsLoadSuccess) {
+                              EasyLoading.dismiss();
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  _buildHeaderRow(order),
-                                  const SizedBox(width: Units.sizedbox_80),
-                                  _buildDetailsRow(
-                                      'Total Amount',
-                                      '\$${(order.totalAmount / 100).toStringAsFixed(2)}',
-                                      Colors.greenAccent),
-                                  const SizedBox(width: Units.sizedbox_80),
-                                  _buildDetailsRow('Order Date',
-                                      order.orderDate, Colors.grey),
-                                  const SizedBox(width: Units.sizedbox_80),
-                                  _buildStatusRow(order),
+                                  Expanded(
+                                    child: DashboardCard(
+                                      title: "Chiffres d'affaires",
+                                      icon: Icons.monetization_on,
+                                      currentValue:
+                                          '\$${(revenueState.revenueStatisticsModel.currentWeekRevenue / 100).toStringAsFixed(2)}',
+                                      currentLabel: "semaine en cours",
+                                      lastValue:
+                                          '\$${(revenueState.revenueStatisticsModel.lastWeekRevenue / 100).toStringAsFixed(2)}',
+                                      lastLabel: 'Semaine dernière',
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: DashboardCard(
+                                      title: "Commandes",
+                                      icon: Icons.shopping_cart,
+                                      currentValue: statistiqueState
+                                          .statistiqueOrderModel
+                                          .currentWeekCountAchatClientCompletee
+                                          .toString(),
+                                      currentLabel: 'semaine en cours',
+                                      lastValue: statistiqueState
+                                          .statistiqueOrderModel
+                                          .lastWeekCountAchatClientCompletee
+                                          .toString(),
+                                      lastLabel: 'semaine dernière',
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: DashboardCard(
+                                      title: "Annulation",
+                                      icon: Icons.cancel,
+                                      currentValue: statistiqueState
+                                          .statistiqueOrderModel
+                                          .currentWeekCountAchatClientAnnulation
+                                          .toString(),
+                                      currentLabel: 'semaine en cours',
+                                      lastValue: statistiqueState
+                                          .statistiqueOrderModel
+                                          .lastWeekCountAchatClientAnnulation
+                                          .toString(),
+                                      lastLabel: 'Semaine dernière',
+                                    ),
+                                  ),
                                 ],
-                              ),
-                            ),
-                          ),
+                              );
+                            }
+                            return const SizedBox();
+                          },
                         );
                       },
                     ),
-            ),
+                    GenericList<DaySelection>(
+                      items: daySelections,
+                      selectedIndex: selectedDayIndex,
+                      onItemSelected: (index) {
+                        setState(() {
+                          selectedDayIndex = index;
+                          context.read<OrderBloc>().add(GetOrders(
+                                FilterOrderParams(
+                                  orderSource: 2,
+                                  days: daySelections[index].days,
+                                ),
+                              ));
+                        });
+                      },
+                      itemBuilder: (daySelection, isSelected) =>
+                          DaySelectionCard(
+                        name: daySelection.name,
+                        isSelected: isSelected,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  height: double.infinity,
+                  color: Colours.primary100,
+                  child: widget.orders.isEmpty
+                      ? Center(
+                          child: Text(
+                            'Pas de commandes aujourd\'hui',
+                            style: TextStyles.interRegularH5.copyWith(
+                              color: Colours.colorsButtonMenu,
+                            ),
+                          ),
+                        )
+                      : ListView.builder(
+                          controller: _scrollController,
+                          itemCount: widget.orders.length,
+                          itemBuilder: (context, index) {
+                            final order = widget.orders[index];
+                            return GestureDetector(
+                              onTap: () {
+                                widget.onSelectOrder(order);
+                              },
+                              child: Card(
+                                color: Colours.primaryPalette,
+                                elevation: 5,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: Units.edgeInsetsLarge,
+                                    horizontal: Units.edgeInsetsLarge),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(
+                                      Units.edgeInsetsLarge),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: _buildHeaderRow(order),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: _buildDetailsRow(
+                                            'Total Amount',
+                                            '\$${(order.totalAmount / 100).toStringAsFixed(2)}',
+                                            Colors.greenAccent),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: _buildDetailsRow(
+                                            'Order Date',
+                                            order.orderDate,
+                                            Colours.colorsButtonMenu),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: _buildStatusRow(order),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -212,84 +268,31 @@ class _OrdersListPageState extends State<OrdersListPage> {
   }
 
   Widget _buildHeaderRow(OrderDetails order) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Order ID: ${order.id}',
-          style: TextStyles.interBoldH6.copyWith(color: Colors.white),
-        ),
-        const SizedBox(height: Units.sizedbox_10),
-        Text(
-          order.reference,
-          style: TextStyles.interRegularBody1
-              .copyWith(color: Colours.colorsButtonMenu),
-        ),
-      ],
+    return HeaderRow(
+      title: 'Order ID: ${order.id}',
+      subtitle: order.reference,
+      titleStyle: TextStyles.interBoldBody1.copyWith(color: Colors.white),
+      subtitleStyle: TextStyles.interRegularBody1
+          .copyWith(color: Colours.colorsButtonMenu),
     );
   }
 
   Widget _buildDetailsRow(String label, String value, Color valueColor) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyles.interRegularBody1.copyWith(color: Colors.white),
-        ),
-        const SizedBox(height: Units.sizedbox_10),
-        Text(
-          value,
-          style: TextStyles.interRegularBody1
-              .copyWith(color: Colours.colorsButtonMenu),
-        ),
-      ],
+    return DetailsRow(
+      label: label,
+      value: value,
+      labelStyle: TextStyles.interRegularBody1.copyWith(color: Colors.white),
+      valueStyle: TextStyles.interRegularBody1.copyWith(color: valueColor),
     );
   }
 
   Widget _buildStatusRow(OrderDetails order) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Status',
-          style: TextStyles.interRegularBody1.copyWith(color: Colors.white),
-        ),
-        const SizedBox(height: Units.sizedbox_10),
-        Container(
-          padding: const EdgeInsets.symmetric(
-              vertical: Units.edgeInsetsMedium,
-              horizontal: Units.edgeInsetsXLarge),
-          decoration: BoxDecoration(
-            color: _getStatusColor(order.status),
-            borderRadius: BorderRadius.circular(Units.radiusXXLarge),
-          ),
-          child: Text(
-            order.status,
-            style: TextStyles.interRegularBody1.copyWith(color: Colors.white),
-          ),
-        ),
-      ],
+    return StatusRow(
+      label: 'Status',
+      statusColor: order.status,
+      labelStyle: TextStyles.interRegularBody1.copyWith(color: Colors.white),
+      statusStyle: TextStyles.interRegularBody1.copyWith(color: Colors.white),
     );
-  }
-
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'Complétée':
-        return Colors.green;
-      case 'En cours':
-        return Colors.orange;
-      case 'En cours de préparation':
-        return Colors.purple;
-      case 'En cours de livraison':
-        return Colors.blueAccent;
-      case 'Livrée':
-        return Colors.greenAccent;
-      case 'Annulation':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
   }
 }
 

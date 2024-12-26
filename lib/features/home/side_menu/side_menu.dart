@@ -53,14 +53,14 @@ class SideMenu extends StatelessWidget {
                       child: ListView(
                         shrinkWrap: true,
                         padding: const EdgeInsets.symmetric(
-                          vertical: Units.edgeInsetsXXLarge,
-                          horizontal: Units.edgeInsetsXXXLarge,
+                          vertical: Units.edgeInsetsLarge,
+                          horizontal: Units.edgeInsetsXLarge,
                         ),
                         children: menuItems
                             .map(
                               (e) => Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: Units.edgeInsetsXXXLarge),
+                                    vertical: Units.edgeInsetsLarge),
                                 child: MenuTile(menu: e),
                               ),
                             )

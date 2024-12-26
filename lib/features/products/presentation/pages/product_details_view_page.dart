@@ -64,7 +64,7 @@ class _ProductDetailsViewPageState extends State<ProductDetailsViewPage> {
       appBar: AppBar(
         backgroundColor: Colours.primary100,
         title: Text(widget.product.name,
-            style: TextStyles.interMediumH4
+            style: TextStyles.interMediumH5
                 .copyWith(color: Colours.colorsButtonMenu)),
         leading: IconButton(
           icon: const Icon(
@@ -89,56 +89,58 @@ class _ProductDetailsViewPageState extends State<ProductDetailsViewPage> {
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ProductImageCarousel(
-                    product: widget.product,
-                    currentIndex: _currentIndex,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                    },
-                  ),
-                  Center(
-                    child: CarouselIndicator(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ProductImageCarousel(
+                      product: widget.product,
                       currentIndex: _currentIndex,
-                      itemCount: 2,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        widget.product.name,
-                        style: TextStyles.interMediumH5.copyWith(
-                          color: Colours.colorsButtonMenu,
-                        ),
+                    Center(
+                      child: CarouselIndicator(
+                        currentIndex: _currentIndex,
+                        itemCount: 2,
                       ),
-                      const SizedBox(width: Units.sizedbox_50),
-                      Text(
-                        '\$${(widget.product.price / 100).toStringAsFixed(2)}',
-                        style: TextStyles.interMediumH5.copyWith(
-                          color: Colours.colorsButtonMenu,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          widget.product.name,
+                          style: TextStyles.interMediumH6.copyWith(
+                            color: Colours.colorsButtonMenu,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: Units.sizedbox_20),
-                  VariantSelector(
-                    uniqueColors: uniqueColors,
-                    uniqueSizes: uniqueSizes,
-                    product: widget.product,
-                    productBloc: productBloc,
-                    selectedColor: selectedColor,
-                    selectedSize: selectedSize,
-                  ),
-                  const SizedBox(height: Units.sizedbox_10),
-                  if (selectedVariant != null)
-                    VariantInfo(selectedVariant: selectedVariant!)
-                  else
-                    const Text('Aucun variant sélectionné'),
-                ],
+                        const SizedBox(width: Units.sizedbox_50),
+                        Text(
+                          '\$${(widget.product.price / 100).toStringAsFixed(2)}',
+                          style: TextStyles.interMediumH6.copyWith(
+                            color: Colours.colorsButtonMenu,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: Units.sizedbox_10),
+                    VariantSelector(
+                      uniqueColors: uniqueColors,
+                      uniqueSizes: uniqueSizes,
+                      product: widget.product,
+                      productBloc: productBloc,
+                      selectedColor: selectedColor,
+                      selectedSize: selectedSize,
+                    ),
+                    const SizedBox(height: Units.sizedbox_8),
+                    if (selectedVariant != null)
+                      VariantInfo(selectedVariant: selectedVariant!)
+                    else
+                      const Text('Aucun variant sélectionné'),
+                  ],
+                ),
               ),
             );
           }
