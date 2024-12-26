@@ -37,12 +37,12 @@ class SelectCard extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-              vertical: Units.edgeInsetsLarge,
-              horizontal: Units.edgeInsetsXXXLarge),
+              vertical: Units.edgeInsetsSmall,
+              horizontal: Units.edgeInsetsLarge),
           child: Column(
             children: [
               Icon(icon, color: Colors.white),
-              const SizedBox(height: Units.sizedbox_10),
+              const SizedBox(height: Units.sizedbox_8),
               Text(
                 label,
                 style: TextStyle(

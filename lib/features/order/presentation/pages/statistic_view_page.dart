@@ -18,6 +18,7 @@ class StatistiquePageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.all(Units.edgeInsetsMedium),
       color: Colours.primary100,
       padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
       child: Column(
@@ -33,15 +34,15 @@ class StatistiquePageView extends StatelessWidget {
                   children: [
                     Text(
                       'Commandes',
-                      style: TextStyles.interBoldH5
+                      style: TextStyles.interBoldBody1
                           .copyWith(color: Colours.colorsButtonMenu),
                     ),
                     Text(
-                      'Semanie en cours',
-                      style: TextStyles.interBoldH5
+                      'Semaine en cours',
+                      style: TextStyles.interBoldBody2
                           .copyWith(color: Colours.colorsButtonMenu),
                     ),
-                    const SizedBox(height: Units.sizedbox_80),
+                    const SizedBox(height: Units.sizedbox_30),
                     Expanded(
                       child: OrderAnalyticsPieWidget(
                         dailyOrderCount: statistiqueOrderModel!

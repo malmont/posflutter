@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pos_flutter/features/Caisse/domain/entities/caisse.dart';
-
+import 'package:intl/intl.dart';
 import '../../../../design/design.dart';
 
 class CaisseActionsPage extends StatelessWidget {
@@ -18,6 +18,16 @@ class CaisseActionsPage extends StatelessWidget {
     required this.onWithdraw,
     required this.onDeposit,
   });
+  String formaterDate(String dateString, {String format = 'yyyy-MM-dd'}) {
+    try {
+      DateTime date = DateTime.parse(dateString);
+      DateFormat formatter = DateFormat(format);
+      return formatter.format(date);
+    } catch (e) {
+      print('Erreur lors du formatage de la date : $e');
+      return 'Date invalide';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,23 +60,23 @@ class CaisseActionsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Caisse ouverte en cours: ID ${caisseDetails!.id}',
+                    'Caisse ouverte: ID ${caisseDetails!.id}',
                     style: TextStyles.interBoldH6
                         .copyWith(color: Colours.colorsButtonMenu),
                   ),
-                  const SizedBox(height: Units.sizedbox_20),
+                  const SizedBox(height: Units.sizedbox_10),
                   Text(
                     'Montant total : \$${(caisseDetails!.amountTotal / 100).toStringAsFixed(2)}',
                     style: TextStyles.interRegularBody1
                         .copyWith(color: Colors.white),
                   ),
-                  const SizedBox(height: Units.sizedbox_20),
+                  const SizedBox(height: Units.sizedbox_10),
                   Text(
-                    'Date de création : ${caisseDetails!.createdAt}',
+                    'Date de création : ${formaterDate(caisseDetails!.createdAt)}',
                     style: TextStyles.interRegularBody1
                         .copyWith(color: Colors.white),
                   ),
-                  const SizedBox(height: Units.sizedbox_20),
+                  const SizedBox(height: Units.sizedbox_10),
                   Text(
                     'Statut : ${caisseDetails!.isOpen ? "Ouverte" : "Fermée"}',
                     style: TextStyles.interBoldBody1.copyWith(

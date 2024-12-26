@@ -20,7 +20,7 @@ class PaymentMethodSelection extends StatelessWidget {
       children: [
         Text(
           "Payment Method",
-          style: TextStyles.interBoldH6.copyWith(
+          style: TextStyles.interBoldBody2.copyWith(
             color: Colours.white,
           ),
         ),

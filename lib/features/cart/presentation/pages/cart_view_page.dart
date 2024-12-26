@@ -109,7 +109,7 @@ class _CartViewPageState extends State<CartViewPage> {
                 return const SizedBox();
               }
               return Positioned(
-                bottom: (MediaQuery.of(context).padding.bottom + 90),
+                bottom: (MediaQuery.of(context).padding.bottom + 10),
                 left: 0,
                 right: 0,
                 child: Container(
@@ -149,20 +149,18 @@ class _CartViewPageState extends State<CartViewPage> {
                               children: [
                                 Text(
                                   'Total items: ${state.totalItems}',
-                                  style: TextStyles.interMediumH6.copyWith(
+                                  style: TextStyles.interRegularBody1.copyWith(
                                       color: Colours.colorsButtonMenu),
                                 ),
                                 Text(
                                   '\$${(state.cart.fold(0.0, (previousValue, element) => (element.product.price * element.quantity) + previousValue) / 100).toStringAsFixed(2)}',
-                                  style: TextStyles.interMediumH6.copyWith(
+                                  style: TextStyles.interRegularBody1.copyWith(
                                       color: Colours.colorsButtonMenu),
                                 ),
                               ],
                             ),
                           ),
                           SizedBox(
-                            height: 40,
-                            width: 100,
                             child: Column(
                               children: [
                                 ElevatedButton(

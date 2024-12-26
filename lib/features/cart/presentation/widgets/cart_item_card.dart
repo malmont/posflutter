@@ -25,7 +25,6 @@ class CartItemCard extends StatelessWidget {
         onTap: onClick as void Function()?,
         onLongPress: onLongClick,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
@@ -62,7 +61,7 @@ class CartItemCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 5),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +87,7 @@ class CartItemCard extends StatelessWidget {
                           style: TextStyles.interBoldBody1
                               .copyWith(color: Colours.colorsButtonMenu),
                         ),
-                        const SizedBox(width: 10),
+                        const Spacer(), // Ajout d'un Spacer pour adapter l'espace
                       ],
                     ),
                   ),
@@ -104,7 +103,7 @@ class CartItemCard extends StatelessWidget {
                             children: [
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
+                                    horizontal: 8, vertical: 4),
                                 margin: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -122,7 +121,7 @@ class CartItemCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // Affichage de la couleur
+                      Spacer(), // Ajout d'un Spacer ici aussi
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -131,15 +130,15 @@ class CartItemCard extends StatelessWidget {
                             children: [
                               Container(
                                 margin: const EdgeInsets.all(4),
-                                width: 40,
-                                height: 40,
+                                width: 30,
+                                height: 30,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Color(int.parse(
                                           cartItem.variant.color.codeHexa
                                               .replaceFirst('#', ''),
                                           radix: 16) +
-                                      0xFF000000), // Conversion du code hexadécimal en couleur
+                                      0xFF000000),
                                   border:
                                       Border.all(color: Colors.black, width: 2),
                                 ),
@@ -162,8 +161,8 @@ class CartItemCard extends StatelessWidget {
                         .add(AddProduct(cartItem: cartItem));
                   },
                   child: Container(
-                    width: 30,
-                    height: 30,
+                    width: 25,
+                    height: 25,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.grey[300],
@@ -188,8 +187,8 @@ class CartItemCard extends StatelessWidget {
                         .add(RemoveProduct(cartItem: cartItem));
                   },
                   child: Container(
-                    width: 30,
-                    height: 30,
+                    width: 25,
+                    height: 25,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.grey[300],
@@ -201,7 +200,7 @@ class CartItemCard extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

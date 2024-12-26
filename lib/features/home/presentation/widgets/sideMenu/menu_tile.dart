@@ -22,8 +22,8 @@ class MenuTile extends StatelessWidget {
           color: Colors.transparent,
           child: ListTile(
             contentPadding: const EdgeInsets.only(
-              top: Units.edgeInsetsLarge,
-              bottom: Units.edgeInsetsLarge,
+              top: Units.edgeInsetsSmall,
+              bottom: Units.edgeInsetsSmall,
             ),
             selected: menu.index == selectedMenu,
             onTap: () {

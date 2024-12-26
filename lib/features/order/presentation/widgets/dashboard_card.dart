@@ -25,27 +25,26 @@ class DashboardCard extends StatelessWidget {
     return Card(
       color: Colours.primaryPalette,
       elevation: 5,
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Units.radiusXXXXLarge),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-            vertical: Units.edgeInsetsXXXXXLarge,
-            horizontal: Units.edgeInsetsXXXLarge),
+            vertical: Units.edgeInsetsLarge, horizontal: Units.edgeInsetsLarge),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               title,
-              style: TextStyles.interBoldH5
+              style: TextStyles.interBoldH6
                   .copyWith(color: Colours.colorsButtonMenu),
             ),
             Padding(
-              padding: const EdgeInsets.all(Units.edgeInsetsXLarge),
+              padding: const EdgeInsets.all(Units.edgeInsetsMedium),
               child: Icon(
                 icon,
-                size: 40,
+                size: 30,
                 color: Colours.colorsButtonMenu,
               ),
             ),
@@ -62,7 +61,6 @@ class DashboardCard extends StatelessWidget {
                   style: TextStyles.interRegularBody1
                       .copyWith(color: Colors.white)),
             ),
-            const SizedBox(height: Units.sizedbox_10),
             Padding(
               padding: const EdgeInsets.all(Units.edgeInsetsSmall),
               child: Text(lastLabel,

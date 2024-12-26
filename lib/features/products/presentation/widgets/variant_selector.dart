@@ -77,11 +77,11 @@ class _VariantSelectorState extends State<VariantSelector> {
           children: [
             Text(
               'Taille',
-              style: TextStyles.interMediumH5.copyWith(
+              style: TextStyles.interBoldBody1.copyWith(
                 color: Colours.primaryPalette,
               ),
             ),
-            const SizedBox(width: 20),
+            const SizedBox(width: Units.sizedbox_10),
             Wrap(
               children: availableSizes.map((size) {
                 return GestureDetector(
@@ -106,8 +106,8 @@ class _VariantSelectorState extends State<VariantSelector> {
                   },
                   child: Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    margin: const EdgeInsets.all(4),
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: selectedSize == size
@@ -123,13 +123,13 @@ class _VariantSelectorState extends State<VariantSelector> {
             ),
           ],
         ),
-        const SizedBox(width: 50),
+        const SizedBox(width: Units.sizedbox_50),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Couleur',
-              style: TextStyles.interMediumH5.copyWith(
+              style: TextStyles.interBoldBody1.copyWith(
                 color: Colours.primaryPalette,
               ),
             ),
@@ -160,8 +160,8 @@ class _VariantSelectorState extends State<VariantSelector> {
                   },
                   child: Container(
                     margin: const EdgeInsets.all(4),
-                    width: 40,
-                    height: 40,
+                    width: 30,
+                    height: 30,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: getColorFromHex(color),
