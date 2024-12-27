@@ -38,14 +38,14 @@ class PaymentMethodSelection extends StatelessWidget {
                 onSelectMethod: onSelectMethod,
               ),
               SelectCard(
-                id: 2,
+                id: 3,
                 label: 'Paypal',
                 icon: Icons.payment,
                 selectedMethodId: selectedMethodId ?? 1,
                 onSelectMethod: onSelectMethod,
               ),
               SelectCard(
-                id: 3,
+                id: 2,
                 label: 'Cash',
                 icon: Icons.money,
                 selectedMethodId: selectedMethodId ?? 1,
