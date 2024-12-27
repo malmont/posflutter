@@ -14,6 +14,7 @@ import 'package:pos_flutter/features/order/application/blocs/revenu_statistique_
 import 'package:pos_flutter/features/order/application/blocs/statistique_order/statistique_order_bloc.dart';
 import 'package:pos_flutter/features/order/domain/entities/filter_order_params.dart';
 import 'package:pos_flutter/features/order/domain/entities/order_detail_response.dart';
+import 'package:pos_flutter/features/order/presentation/widgets/bottom_navigation_bar_with_cash_dialog.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/order_type_selection.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/outline_label_card.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/payment_method_selection.dart';
@@ -378,32 +379,12 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
               ],
             ),
           ),
-          bottomNavigationBar: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Builder(builder: (context) {
-                return InputFormButton(
-                  color: Colors.black87,
-                  onClick: () {
-                    context.read<OrderBloc>().add(
-                          AddOrder(OrderDetailResponse(
-                              orderSource: 2,
-                              addressId: 38,
-                              paymentMethod: selectedPaymentMethodId ?? 1,
-                              carrierId: 7,
-                              typeOrder: selectedOrderType ?? 1,
-                              items: widget.items
-                                  .map((e) => OrderItemDetail(
-                                        productVariantId: e.variant.id,
-                                        quantity: e.quantity,
-                                      ))
-                                  .toList())),
-                        );
-                  },
-                  titleText: 'Confirm',
-                );
-              }),
-            ),
+          bottomNavigationBar: BottomNavigationBarWithCashDialog(
+            selectedPaymentMethodId: selectedPaymentMethodId,
+            items: widget.items,
+            onAddOrder: (orderDetails) {
+              context.read<OrderBloc>().add(AddOrder(orderDetails));
+            },
           ),
         ),
       ),
