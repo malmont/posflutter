@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:pos_flutter/features/order/domain/entities/order_detail_response.dart';
+import 'package:pos_flutter/features/order/infrastucture/models/payment_method_model.dart';
 
 OrderDetailResponseModel orderDetailResponseModelFromJson(String str) =>
     OrderDetailResponseModel.fromJson(json.decode(str));
@@ -11,18 +12,18 @@ String orderDetailResponseModelToJson(OrderDetailResponseModel data) =>
 class OrderDetailResponseModel extends OrderDetailResponse {
   const OrderDetailResponseModel({
     required super.orderSource,
-    required super.paymentMethod,
+    required List<PaymentMethodModel> super.paymentMethods,
     required super.addressId,
     required super.carrierId,
     required super.typeOrder,
-    required List<OrderItemDetailModel>
-        super.items, // Modèle des items spécifiques
+    required List<OrderItemDetailModel> super.items,
   });
 
   factory OrderDetailResponseModel.fromJson(Map<String, dynamic> json) =>
       OrderDetailResponseModel(
         orderSource: json["orderSource"],
-        paymentMethod: json["paymentMethod"],
+        paymentMethods: List<PaymentMethodModel>.from(
+            json["paymentMethods"].map((x) => PaymentMethodModel.fromJson(x))),
         addressId: json["addressId"],
         carrierId: json["carrierId"],
         typeOrder: json["typeOrder"],
@@ -32,7 +33,9 @@ class OrderDetailResponseModel extends OrderDetailResponse {
 
   Map<String, dynamic> toJson() => {
         "orderSource": orderSource,
-        "paymentMethod": paymentMethod,
+        "paymentMethods": List<dynamic>.from(
+            (paymentMethods as List<PaymentMethodModel>)
+                .map((payment) => payment.toJson())),
         "addressId": addressId,
         "carrierId": carrierId,
         "typeOrder": typeOrder,
@@ -43,7 +46,9 @@ class OrderDetailResponseModel extends OrderDetailResponse {
   factory OrderDetailResponseModel.fromEntity(OrderDetailResponse entity) =>
       OrderDetailResponseModel(
         orderSource: entity.orderSource,
-        paymentMethod: entity.paymentMethod,
+        paymentMethods: entity.paymentMethods
+            .map((payment) => PaymentMethodModel.fromEntity(payment))
+            .toList(),
         addressId: entity.addressId,
         carrierId: entity.carrierId,
         typeOrder: entity.typeOrder,

@@ -15,6 +15,6 @@ abstract class OrderApiClient {
     @Query('days') int days,
   );
 
-  @POST('/order/create')
+  @POST('/order/create-multi-payment')
   Future<HttpResponse> createOrder(@Body() OrderDetailResponseModel params);
 }

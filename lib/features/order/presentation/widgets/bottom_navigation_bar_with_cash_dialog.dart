@@ -4,6 +4,8 @@ import 'package:pos_flutter/features/cart/domain/entities/cart_item.dart';
 import 'package:pos_flutter/features/cart/presentation/widgets/input_form_button.dart';
 import 'package:pos_flutter/features/order/application/blocs/order_bloc/order_bloc.dart';
 import 'package:pos_flutter/features/order/domain/entities/order_detail_response.dart';
+import 'package:pos_flutter/features/order/domain/entities/payment_method.dart';
+import 'package:pos_flutter/features/order/presentation/widgets/multi_payment_dialog.dart';
 
 import '../../../../design/design.dart';
 
@@ -11,12 +13,14 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
   final int? selectedPaymentMethodId;
   final List<CartItem> items;
   final Function(OrderDetailResponse) onAddOrder;
+  final double totalAmount;
 
   const BottomNavigationBarWithCashDialog({
     super.key,
     required this.selectedPaymentMethodId,
     required this.items,
     required this.onAddOrder,
+    required this.totalAmount,
   });
 
   Future<double?> _showCashDialog(
@@ -279,14 +283,44 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
   }
 
   void _handleAddOrder(BuildContext context) async {
-    final totalAmount = items.fold(
-            0.0,
-            (previousValue, element) =>
-                (((element.product.price * element.quantity) +
-                    previousValue))) /
-        100;
+    if (selectedPaymentMethodId == 4) {
+      // MultiPaiement sélectionné
+      final payments = await showDialog<List<PaymentMethod>>(
+        context: context,
+        builder: (context) {
+          return MultiPaymentDialog(
+            totalAmount: totalAmount,
+            onPaymentComplete: (payments) {
+              Navigator.pop(context, payments);
+            },
+          );
+        },
+      );
 
-    if (selectedPaymentMethodId == 2) {
+      if (payments != null && payments.isNotEmpty) {
+        // Ajouter l'événement au bloc après avoir récupéré les paiements
+        context.read<OrderBloc>().add(
+              AddOrder(
+                OrderDetailResponse(
+                  orderSource: 2,
+                  addressId: 38,
+                  paymentMethods: payments,
+                  carrierId: 7,
+                  typeOrder: 1,
+                  items: items
+                      .map(
+                        (e) => OrderItemDetail(
+                          productVariantId: e.variant.id,
+                          quantity: e.quantity,
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            );
+      }
+    } else if (selectedPaymentMethodId == 2) {
+      // Paiement en espèces
       final cashGiven = await _showCashDialog(context, totalAmount);
       if (cashGiven != null) {
         if (cashGiven < totalAmount) {
@@ -294,44 +328,56 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
           await _showInsufficientAmountDialog(context, totalAmount, cashGiven);
         } else {
           context.read<OrderBloc>().add(
-                AddOrder(OrderDetailResponse(
+                AddOrder(
+                  OrderDetailResponse(
                     orderSource: 2,
                     addressId: 38,
-                    paymentMethod: selectedPaymentMethodId ?? 1,
+                    paymentMethods: [
+                      PaymentMethod(
+                        type: selectedPaymentMethodId ?? 1,
+                        amount: totalAmount ?? 0.0,
+                      ),
+                    ],
                     carrierId: 7,
                     typeOrder: 1,
                     items: items
-                        .map((e) => OrderItemDetail(
-                              productVariantId: e.variant.id,
-                              quantity: e.quantity,
-                            ))
-                        .toList())),
+                        .map(
+                          (e) => OrderItemDetail(
+                            productVariantId: e.variant.id,
+                            quantity: e.quantity,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
               );
-
-          context.read<OrderBloc>().stream.listen((state) async {
-            if (state is OrderAddSuccess) {
-              await _showChangeDialog(context, cashGiven, totalAmount);
-            } else if (state is OrderAddFailure) {
-              await _showErrorDialog(context);
-            }
-          });
         }
       }
     } else {
       // Paiement autre que espèces
       context.read<OrderBloc>().add(
-            AddOrder(OrderDetailResponse(
+            AddOrder(
+              OrderDetailResponse(
                 orderSource: 2,
                 addressId: 38,
-                paymentMethod: selectedPaymentMethodId ?? 1,
+                paymentMethods: [
+                  PaymentMethod(
+                    type: selectedPaymentMethodId ?? 1,
+                    amount: totalAmount ?? 0.0,
+                  ),
+                ],
                 carrierId: 7,
                 typeOrder: 1,
                 items: items
-                    .map((e) => OrderItemDetail(
-                          productVariantId: e.variant.id,
-                          quantity: e.quantity,
-                        ))
-                    .toList())),
+                    .map(
+                      (e) => OrderItemDetail(
+                        productVariantId: e.variant.id,
+                        quantity: e.quantity,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
           );
     }
   }
@@ -349,4 +395,9 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
       ),
     );
   }
+}
+
+class TaxRates {
+  static const double tpsRate = 0.05; // TPS (5 %)
+  static const double tvqRate = 0.10; // TVQ (10 %)
 }
