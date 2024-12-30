@@ -287,31 +287,31 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i323.GetProductUseCase(gh<_i116.ProductRepository>()));
     gh.lazySingleton<_i510.GetRemotePaymentUsecase>(
         () => _i510.GetRemotePaymentUsecase(gh<_i660.PaymentRepository>()));
-    gh.lazySingleton<_i974.GetCachedPaymentUsecase>(
-        () => _i974.GetCachedPaymentUsecase(gh<_i660.PaymentRepository>()));
     gh.lazySingleton<_i564.GetCachedPaymentStatisticUsecase>(() =>
         _i564.GetCachedPaymentStatisticUsecase(gh<_i660.PaymentRepository>()));
     gh.lazySingleton<_i874.ClearCachedPaymentStatisticUseCase>(() =>
         _i874.ClearCachedPaymentStatisticUseCase(
             gh<_i660.PaymentRepository>()));
+    gh.lazySingleton<_i974.GetCachedPaymentUsecase>(
+        () => _i974.GetCachedPaymentUsecase(gh<_i660.PaymentRepository>()));
     gh.lazySingleton<_i880.GetRemotePaymentStatisticUsecase>(() =>
         _i880.GetRemotePaymentStatisticUsecase(gh<_i660.PaymentRepository>()));
+    gh.lazySingleton<_i966.GetRemoteStatistiqueOrderUseCase>(() =>
+        _i966.GetRemoteStatistiqueOrderUseCase(gh<_i342.OrderRepository>()));
     gh.lazySingleton<_i434.AddOrderUseCase>(
         () => _i434.AddOrderUseCase(gh<_i342.OrderRepository>()));
     gh.lazySingleton<_i555.GetRemoteOrdersUseCase>(
         () => _i555.GetRemoteOrdersUseCase(gh<_i342.OrderRepository>()));
-    gh.lazySingleton<_i767.ClearLocalOrdersUseCase>(
-        () => _i767.ClearLocalOrdersUseCase(gh<_i342.OrderRepository>()));
-    gh.lazySingleton<_i739.GetCachedOrdersUseCase>(
-        () => _i739.GetCachedOrdersUseCase(gh<_i342.OrderRepository>()));
-    gh.lazySingleton<_i966.GetRemoteStatistiqueOrderUseCase>(() =>
-        _i966.GetRemoteStatistiqueOrderUseCase(gh<_i342.OrderRepository>()));
     gh.lazySingleton<_i684.GetCachedStatisticsOrderUseCase>(() =>
         _i684.GetCachedStatisticsOrderUseCase(gh<_i342.OrderRepository>()));
     gh.lazySingleton<_i933.GetRemoteRevenueStatisticsUseCase>(() =>
         _i933.GetRemoteRevenueStatisticsUseCase(gh<_i342.OrderRepository>()));
+    gh.lazySingleton<_i767.ClearLocalOrdersUseCase>(
+        () => _i767.ClearLocalOrdersUseCase(gh<_i342.OrderRepository>()));
     gh.lazySingleton<_i721.GetCachedRevenueStatisticsUseCase>(() =>
         _i721.GetCachedRevenueStatisticsUseCase(gh<_i342.OrderRepository>()));
+    gh.lazySingleton<_i739.GetCachedOrdersUseCase>(
+        () => _i739.GetCachedOrdersUseCase(gh<_i342.OrderRepository>()));
     gh.lazySingleton<_i224.ClearLocalStatisticsOrderUseCase>(() =>
         _i224.ClearLocalStatisticsOrderUseCase(gh<_i342.OrderRepository>()));
     gh.lazySingleton<_i975.ClearLocalRevenueStatisticsUseCase>(() =>

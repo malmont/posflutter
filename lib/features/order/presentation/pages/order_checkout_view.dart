@@ -39,7 +39,15 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
   int? selectedOrderType = 1;
   @override
   Widget build(BuildContext context) {
-    int deliveryCharge = 0;
+    double totalhortax = widget.items.fold(
+          0.0,
+          (previousValue, element) =>
+              (element.product.price * element.quantity) + previousValue,
+        ) /
+        100;
+
+    double TPS = (TaxRates.tpsRate * totalhortax);
+    double TVQ = (TaxRates.tvqRate * totalhortax);
     return BlocProvider(
       create: (context) => getIt<OrderBloc>(),
       child: BlocListener<OrderBloc, OrderState>(
@@ -290,7 +298,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
                 OutlineLabelCard(
                   title: 'Order Summary',
                   child: Container(
-                    height: 120,
+                    height: 140,
                     padding: const EdgeInsets.symmetric(
                         vertical: Units.edgeInsetsLarge),
                     child: Column(
@@ -324,8 +332,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
                             Text("Total Price",
                                 style: TextStyles.interRegularBody1
                                     .copyWith(color: Colours.colorsButtonMenu)),
-                            Text(
-                                '\$${(widget.items.fold(0.0, (previousValue, element) => ((element.product.price * element.quantity) + previousValue)) / 100).toStringAsFixed(2)}',
+                            Text('\$${(totalhortax).toStringAsFixed(2)}',
                                 style: TextStyles.interRegularBody1
                                     .copyWith(color: Colours.colorsButtonMenu)),
                           ],
@@ -335,7 +342,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Delivery Charge",
+                                Text("Tax TPS",
                                     style: TextStyles.interRegularBody1
                                         .copyWith(
                                             color: Colours.colorsButtonMenu)),
@@ -343,8 +350,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                        '\$${(deliveryCharge / 100).toStringAsFixed(2)}',
+                                    Text('\$${(TPS).toStringAsFixed(2)}',
                                         style: TextStyles.interRegularBody1
                                             .copyWith(
                                                 color:
@@ -359,12 +365,35 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Total",
+                                Text("Tax TVQ",
+                                    style: TextStyles.interRegularBody1
+                                        .copyWith(
+                                            color: Colours.colorsButtonMenu)),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('\$${(TVQ).toStringAsFixed(2)}',
+                                        style: TextStyles.interRegularBody1
+                                            .copyWith(
+                                                color:
+                                                    Colours.colorsButtonMenu)),
+                                  ],
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("TotalTTC",
                                     style: TextStyles.interRegularBody1
                                         .copyWith(
                                             color: Colours.colorsButtonMenu)),
                                 Text(
-                                    '\$${((widget.items.fold(0.0, (previousValue, element) => (((element.product.price * element.quantity) + previousValue)) + deliveryCharge) / 100)).toStringAsFixed(2)}',
+                                    '\$${(totalhortax + (TVQ + TPS)).toStringAsFixed(2)}',
                                     style: TextStyles.interRegularBody1
                                         .copyWith(
                                             color: Colours.colorsButtonMenu))
@@ -380,6 +409,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
             ),
           ),
           bottomNavigationBar: BottomNavigationBarWithCashDialog(
+            totalAmount: (totalhortax + (TVQ + TPS)),
             selectedPaymentMethodId: selectedPaymentMethodId,
             items: widget.items,
             onAddOrder: (orderDetails) {

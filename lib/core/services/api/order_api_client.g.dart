@@ -79,7 +79,7 @@ class _OrderApiClient implements OrderApiClient {
     )
         .compose(
           _dio.options,
-          '/order/create',
+          '/order/create-multi-payment',
           queryParameters: queryParameters,
           data: _data,
         )

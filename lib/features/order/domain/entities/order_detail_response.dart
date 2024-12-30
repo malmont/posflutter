@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:pos_flutter/features/order/domain/entities/payment_method.dart';
 
 class OrderDetailResponse extends Equatable {
   final int orderSource;
-  final int paymentMethod;
+  final List<PaymentMethod> paymentMethods; // Liste de méthodes de paiement
   final int addressId;
   final int carrierId;
   final int typeOrder;
@@ -10,7 +11,7 @@ class OrderDetailResponse extends Equatable {
 
   const OrderDetailResponse({
     required this.orderSource,
-    required this.paymentMethod,
+    required this.paymentMethods,
     required this.addressId,
     required this.carrierId,
     required this.typeOrder,
@@ -20,7 +21,7 @@ class OrderDetailResponse extends Equatable {
   @override
   List<Object?> get props => [
         orderSource,
-        paymentMethod,
+        paymentMethods,
         addressId,
         carrierId,
         typeOrder,
