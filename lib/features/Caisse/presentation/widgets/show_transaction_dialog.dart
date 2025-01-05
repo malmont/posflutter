@@ -8,6 +8,8 @@ import '../../../../design/design.dart';
 void showTransactionDialog({
   required BuildContext context,
   required String title,
+  required double amountTotalCaisse,
+  required double amountTotalCashFund,
   required void Function(TransactionCaisseResponseModel) onSubmit,
 }) {
   List<CashDetailResponseModel> cashDetails = [];
@@ -69,7 +71,7 @@ void showTransactionDialog({
               textAlign: TextAlign.center,
             ),
             content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
+              width: MediaQuery.of(context).size.width * 0.9,
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -77,83 +79,194 @@ void showTransactionDialog({
                     Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        'Montant total : \$${calculateTotalAmount().toStringAsFixed(2)}',
-                        style: TextStyles.interBoldH6
-                            .copyWith(color: Colours.colorsButtonMenu),
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                'Montant total ',
+                                style: TextStyles.interBoldBody1
+                                    .copyWith(color: Colours.colorsButtonMenu),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                ' \$${calculateTotalAmount().toStringAsFixed(2)}',
+                                style: TextStyles.interBoldBody2
+                                    .copyWith(color: Colours.white),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 20),
+                          Column(
+                            children: [
+                              Text(
+                                'Caisse ',
+                                style: TextStyles.interBoldBody1
+                                    .copyWith(color: Colours.colorsButtonMenu),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                ' \$${amountTotalCaisse.toStringAsFixed(2)}',
+                                style: TextStyles.interBoldBody2
+                                    .copyWith(color: Colours.white),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 20),
+                          Column(
+                            children: [
+                              Text(
+                                ' Fond de caisse ',
+                                style: TextStyles.interBoldBody1
+                                    .copyWith(color: Colours.colorsButtonMenu),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                '\$${amountTotalCashFund.toStringAsFixed(2)}',
+                                style: TextStyles.interBoldBody2
+                                    .copyWith(color: Colours.white),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    ListView.builder(
+                    GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: cashDetails.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4, // Quatre colonnes
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: 2.5, // Ajuste la hauteur des éléments
+                      ),
                       itemBuilder: (context, index) {
                         final detail = cashDetails[index];
-                        return Card(
-                          color: Colours.primary100,
-                          margin: const EdgeInsets.symmetric(vertical: 5),
-                          child: ListTile(
-                            title: DropdownButton<int>(
-                              value: detail.typeCash,
-                              dropdownColor: Colours.primaryPalette,
-                              items: const [
-                                DropdownMenuItem(
-                                    value: 1, child: Text("Billet de 100\$")),
-                                DropdownMenuItem(
-                                    value: 2, child: Text("Billet de 50\$")),
-                                DropdownMenuItem(
-                                    value: 3, child: Text("Billet de 10\$")),
-                                DropdownMenuItem(
-                                    value: 4, child: Text("Billet de 5\$")),
-                                DropdownMenuItem(
-                                    value: 5, child: Text("Pièce de 2\$")),
-                                DropdownMenuItem(
-                                    value: 6, child: Text("Pièce de 1\$")),
-                                DropdownMenuItem(
-                                    value: 7, child: Text("Pièce de 25 ¢")),
-                                DropdownMenuItem(
-                                    value: 8, child: Text("Pièce de 10¢")),
-                                DropdownMenuItem(
-                                    value: 9, child: Text("Pièce de 5¢")),
-                                DropdownMenuItem(
-                                    value: 10, child: Text("Pièce de 1¢")),
-                              ],
-                              onChanged: (newValue) {
-                                if (newValue != null) {
-                                  updateCashDetail(index,
-                                      detail.copyWith(typeCash: newValue));
-                                }
-                              },
+                        return Row(
+                          children: [
+                            Expanded(
+                              flex:
+                                  3, // Premier bloc : Dropdown et TextField empilés
+                              child: Column(
+                                children: [
+                                  DropdownButton<int>(
+                                    value: detail.typeCash,
+                                    dropdownColor: Colours.primaryPalette,
+                                    isExpanded: true,
+                                    items: const [
+                                      DropdownMenuItem(
+                                          value: 1,
+                                          child: Text(
+                                            "Billet de 100\$",
+                                            style:
+                                                TextStyle(color: Colours.white),
+                                          )),
+                                      DropdownMenuItem(
+                                          value: 2,
+                                          child: Text("Billet de 50\$",
+                                              style: TextStyle(
+                                                  color: Colours.white))),
+                                      DropdownMenuItem(
+                                          value: 3,
+                                          child: Text("Billet de 10\$",
+                                              style: TextStyle(
+                                                  color: Colours.white))),
+                                      DropdownMenuItem(
+                                          value: 4,
+                                          child: Text("Billet de 5\$",
+                                              style: TextStyle(
+                                                  color: Colours.white))),
+                                      DropdownMenuItem(
+                                          value: 5,
+                                          child: Text("Pièce de 2\$",
+                                              style: TextStyle(
+                                                  color: Colours.white))),
+                                      DropdownMenuItem(
+                                          value: 6,
+                                          child: Text("Pièce de 1\$",
+                                              style: TextStyle(
+                                                  color: Colours.white))),
+                                      DropdownMenuItem(
+                                          value: 7,
+                                          child: Text("Pièce de 25 ¢",
+                                              style: TextStyle(
+                                                  color: Colours.white))),
+                                      DropdownMenuItem(
+                                          value: 8,
+                                          child: Text("Pièce de 10¢",
+                                              style: TextStyle(
+                                                  color: Colours.white))),
+                                      DropdownMenuItem(
+                                          value: 9,
+                                          child: Text("Pièce de 5¢",
+                                              style: TextStyle(
+                                                  color: Colours.white))),
+                                      DropdownMenuItem(
+                                          value: 10,
+                                          child: Text("Pièce de 1¢",
+                                              style: TextStyle(
+                                                  color: Colours.white))),
+                                    ],
+                                    onChanged: (newValue) {
+                                      if (newValue != null) {
+                                        updateCashDetail(
+                                            index,
+                                            detail.copyWith(
+                                                typeCash: newValue));
+                                      }
+                                    },
+                                  ),
+                                  const SizedBox(height: 8),
+                                  TextField(
+                                    keyboardType: TextInputType.number,
+                                    decoration: const InputDecoration(
+                                      labelText: "Nombre",
+                                      labelStyle:
+                                          TextStyle(color: Colours.white),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colours.white),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colours.colorsButtonMenu),
+                                      ),
+                                    ),
+                                    style:
+                                        const TextStyle(color: Colours.white),
+                                    onChanged: (value) {
+                                      updateCashDetail(
+                                        index,
+                                        detail.copyWith(
+                                            nombreItems:
+                                                int.tryParse(value) ?? 0),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                            subtitle: TextField(
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                labelText: "Nombre d'éléments",
-                                labelStyle: TextStyles.interRegularBody1
-                                    .copyWith(color: Colors.white),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colours.colorsButtonMenu),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              flex: 1, // Icône de suppression à droite
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red),
+                                  onPressed: () => removeCashDetail(index),
                                 ),
                               ),
-                              style: TextStyles.interRegularBody1
-                                  .copyWith(color: Colors.white),
-                              onChanged: (value) {
-                                updateCashDetail(
-                                  index,
-                                  detail.copyWith(
-                                      nombreItems: int.tryParse(value) ?? 0),
-                                );
-                              },
                             ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => removeCashDetail(index),
-                            ),
-                          ),
+                          ],
                         );
                       },
                     ),

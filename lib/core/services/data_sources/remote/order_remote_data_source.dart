@@ -45,7 +45,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
         params.orderSource != null && params.orderSource! > 0
             ? params.orderSource!
             : 1;
-    final int days = params.days != null && params.days! > 0 ? params.days! : 7;
+    final int days = params.days != null && params.days! > 0 ? params.days! : 1;
     try {
       final response = await apiClient.getOrders(
         orderSource,

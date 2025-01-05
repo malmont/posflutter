@@ -64,7 +64,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
             context
                 .read<PaymentBloc>()
                 .add(const GetPayments(FilterOrderParams()));
-            context.read<CaisseBloc>().add(const GetCaisse(days: 15));
+            context.read<CaisseBloc>().add(const GetCaisse(days: 1));
             context.read<OrderBloc>().add(
                 const GetOrders(FilterOrderParams(orderSource: 2, days: 1)));
             context

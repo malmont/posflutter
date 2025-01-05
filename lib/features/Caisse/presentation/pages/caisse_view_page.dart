@@ -34,9 +34,13 @@ class _CaisseViewState extends State<CaisseView> {
     });
   }
 
+  Caisse? openCaisse;
+
   void _handleTransaction(
       BuildContext context, String title, String transactiontype) {
     showTransactionDialog(
+      amountTotalCaisse: openCaisse?.amountTotal ?? 0,
+      amountTotalCashFund: openCaisse?.fondDeCaisse ?? 0,
       context: context,
       title: title,
       onSubmit: (TransactionCaisseResponseModel transaction) {
@@ -95,6 +99,8 @@ class _CaisseViewState extends State<CaisseView> {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is CaisseSuccess) {
                         EasyLoading.dismiss();
+                        openCaisse =
+                            state.caisses.firstWhere((caisse) => caisse.isOpen);
                         return CaisseListPage(
                           caisses: state.caisses,
                           onSelectCaisse: navigateToDetails,
