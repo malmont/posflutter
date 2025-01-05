@@ -409,6 +409,7 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
             ),
           ),
           bottomNavigationBar: BottomNavigationBarWithCashDialog(
+            typeOrder: selectedOrderType,
             totalAmount: (totalhortax + (TVQ + TPS)),
             selectedPaymentMethodId: selectedPaymentMethodId,
             items: widget.items,

@@ -6,6 +6,7 @@ import 'package:pos_flutter/features/order/application/blocs/order_bloc/order_bl
 import 'package:pos_flutter/features/order/domain/entities/order_detail_response.dart';
 import 'package:pos_flutter/features/order/domain/entities/payment_method.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/multi_payment_dialog.dart';
+import 'package:pos_flutter/features/order/presentation/widgets/receipt_printer.dart';
 
 import '../../../../design/design.dart';
 
@@ -14,6 +15,7 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
   final List<CartItem> items;
   final Function(OrderDetailResponse) onAddOrder;
   final double totalAmount;
+  final int? typeOrder;
 
   const BottomNavigationBarWithCashDialog({
     super.key,
@@ -21,12 +23,12 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
     required this.items,
     required this.onAddOrder,
     required this.totalAmount,
+    required this.typeOrder,
   });
 
   Future<double?> _showCashDialog(
       BuildContext context, double totalAmount) async {
     double enteredAmount = 0.0;
-
     return showDialog<double>(
       context: context,
       builder: (context) {
@@ -283,6 +285,7 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
   }
 
   void _handleAddOrder(BuildContext context) async {
+    List<CartItem> itemsThis = new List<CartItem>.from(items);
     if (selectedPaymentMethodId == 4) {
       // MultiPaiement sélectionné
       final payments = await showDialog<List<PaymentMethod>>(
@@ -298,7 +301,6 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
       );
 
       if (payments != null && payments.isNotEmpty) {
-        // Ajouter l'événement au bloc après avoir récupéré les paiements
         context.read<OrderBloc>().add(
               AddOrder(
                 OrderDetailResponse(
@@ -306,7 +308,7 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
                   addressId: 38,
                   paymentMethods: payments,
                   carrierId: 7,
-                  typeOrder: 1,
+                  typeOrder: typeOrder ?? 1,
                   items: items
                       .map(
                         (e) => OrderItemDetail(
@@ -318,6 +320,18 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
                 ),
               ),
             );
+
+        // Écouter les changements d'état pour l'impression
+        context.read<OrderBloc>().stream.listen((state) async {
+          if (state is OrderAddSuccess) {
+            await ReceiptPrinter.printReceipt(
+              storeName: 'Votre magasin',
+              items: itemsThis,
+              totalAmount: totalAmount,
+              cashGiven: 0.0, // Montant donné n'est pas pertinent ici
+            );
+          }
+        });
       }
     } else if (selectedPaymentMethodId == 2) {
       // Paiement en espèces
@@ -339,7 +353,7 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
                       ),
                     ],
                     carrierId: 7,
-                    typeOrder: 1,
+                    typeOrder: typeOrder ?? 1,
                     items: items
                         .map(
                           (e) => OrderItemDetail(
@@ -351,6 +365,20 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
                   ),
                 ),
               );
+
+          context.read<OrderBloc>().stream.listen((state) async {
+            if (state is OrderAddSuccess) {
+              await _showChangeDialog(context, cashGiven, totalAmount);
+              await ReceiptPrinter.printReceipt(
+                storeName: 'Votre magasin',
+                items: itemsThis,
+                totalAmount: totalAmount,
+                cashGiven: cashGiven,
+              );
+            } else if (state is OrderAddFailure) {
+              await _showErrorDialog(context);
+            }
+          });
         }
       }
     } else {
@@ -367,7 +395,7 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
                   ),
                 ],
                 carrierId: 7,
-                typeOrder: 1,
+                typeOrder: typeOrder ?? 1,
                 items: items
                     .map(
                       (e) => OrderItemDetail(
@@ -379,6 +407,17 @@ class BottomNavigationBarWithCashDialog extends StatelessWidget {
               ),
             ),
           );
+
+      context.read<OrderBloc>().stream.listen((state) async {
+        if (state is OrderAddSuccess) {
+          await ReceiptPrinter.printReceipt(
+            storeName: 'Votre magasin',
+            items: itemsThis,
+            totalAmount: totalAmount,
+            cashGiven: 0.0, // Montant donné n'est pas pertinent ici
+          );
+        }
+      });
     }
   }
 

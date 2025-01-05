@@ -9,6 +9,8 @@ class CaisseActionsPage extends StatelessWidget {
   final VoidCallback onCloseCaisse;
   final VoidCallback onWithdraw;
   final VoidCallback onDeposit;
+  final VoidCallback onCashFundWithdraw;
+  final VoidCallback onCashFundDeposit;
 
   const CaisseActionsPage({
     super.key,
@@ -17,6 +19,8 @@ class CaisseActionsPage extends StatelessWidget {
     required this.onCloseCaisse,
     required this.onWithdraw,
     required this.onDeposit,
+    required this.onCashFundWithdraw,
+    required this.onCashFundDeposit,
   });
   String formaterDate(String dateString, {String format = 'yyyy-MM-dd'}) {
     try {
@@ -36,7 +40,7 @@ class CaisseActionsPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            flex: 3,
+            flex: 4,
             child: _buildCaisseInfoCard(),
           ),
           Expanded(
@@ -72,6 +76,12 @@ class CaisseActionsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: Units.sizedbox_10),
                   Text(
+                    'Fond de caisse : \$${(caisseDetails!.fondDeCaisse / 100).toStringAsFixed(2)}',
+                    style: TextStyles.interRegularBody1
+                        .copyWith(color: Colors.white),
+                  ),
+                  const SizedBox(height: Units.sizedbox_10),
+                  Text(
                     'Date de création : ${formaterDate(caisseDetails!.createdAt)}',
                     style: TextStyles.interRegularBody1
                         .copyWith(color: Colors.white),
@@ -102,58 +112,84 @@ class CaisseActionsPage extends StatelessWidget {
       elevation: 5,
       margin: const EdgeInsets.all(Units.edgeInsetsXXLarge),
       child: Padding(
-        padding: const EdgeInsets.all(Units.edgeInsetsXXXXXXXLarge),
+        padding: const EdgeInsets.all(Units.edgeInsetsXLarge),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(
               width: double.infinity,
-              height: Units.u64,
+              height: Units.u56,
               child: ElevatedButton(
                 style: CustomButtonStyle.customButtonStyle(
                   type: ButtonType.cancelButton,
                   isSelected: isSelected,
                 ),
                 onPressed: caisseDetails == null ? onOpenCaisse : null,
-                child:
-                    const Text('Ouvrir Caisse', style: TextStyles.interBoldH6),
+                child: const Text('Ouvrir Caisse',
+                    style: TextStyles.interBoldBody1),
               ),
             ),
             SizedBox(
               width: double.infinity,
-              height: Units.u64,
+              height: Units.u48,
               child: ElevatedButton(
                 style: CustomButtonStyle.customButtonStyle(
                   type: ButtonType.cancelButton,
                   isSelected: isSelected,
                 ),
                 onPressed: caisseDetails != null ? onCloseCaisse : null,
-                child:
-                    const Text('Fermer Caisse', style: TextStyles.interBoldH6),
+                child: const Text('Fermer Caisse',
+                    style: TextStyles.interBoldBody1),
               ),
             ),
             SizedBox(
               width: double.infinity,
-              height: Units.u64,
+              height: Units.u48,
               child: ElevatedButton(
                 style: CustomButtonStyle.customButtonStyle(
                   type: ButtonType.cancelButton,
                   isSelected: isSelected,
                 ),
                 onPressed: caisseDetails != null ? onDeposit : null,
-                child: const Text('Dépôt', style: TextStyles.interBoldH6),
+                child: const Text('Dépôt', style: TextStyles.interBoldBody1),
               ),
             ),
             SizedBox(
               width: double.infinity,
-              height: Units.u64,
+              height: Units.u48,
               child: ElevatedButton(
                 style: CustomButtonStyle.customButtonStyle(
                   type: ButtonType.cancelButton,
                   isSelected: isSelected,
                 ),
                 onPressed: caisseDetails != null ? onWithdraw : null,
-                child: const Text('Retrait', style: TextStyles.interBoldH6),
+                child: const Text('Retrait', style: TextStyles.interBoldBody1),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: Units.u48,
+              child: ElevatedButton(
+                style: CustomButtonStyle.customButtonStyle(
+                  type: ButtonType.cancelButton,
+                  isSelected: isSelected,
+                ),
+                onPressed: caisseDetails != null ? onCashFundDeposit : null,
+                child: const Text('Dépôt fond de caisse',
+                    style: TextStyles.interBoldBody1),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: Units.u48,
+              child: ElevatedButton(
+                style: CustomButtonStyle.customButtonStyle(
+                  type: ButtonType.cancelButton,
+                  isSelected: isSelected,
+                ),
+                onPressed: caisseDetails != null ? onCashFundWithdraw : null,
+                child: const Text('Retrait fond de caisse',
+                    style: TextStyles.interBoldBody1),
               ),
             ),
           ],

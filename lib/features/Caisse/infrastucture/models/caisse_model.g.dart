@@ -9,6 +9,7 @@ part of 'caisse_model.dart';
 CaisseModel _$CaisseModelFromJson(Map<String, dynamic> json) => CaisseModel(
       id: (json['id'] as num).toInt(),
       amountTotal: (json['amountTotal'] as num).toDouble(),
+      fondDeCaisse: (json['fondDeCaisse'] as num?)?.toDouble(),
       createdAt: json['createdAt'] as String,
       isOpen: json['isOpen'] as bool,
       transactionCaisses: (json['transactionCaisses'] as List<dynamic>)
@@ -21,6 +22,7 @@ Map<String, dynamic> _$CaisseModelToJson(CaisseModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'amountTotal': instance.amountTotal,
+      'fondDeCaisse': instance.fondDeCaisse,
       'createdAt': instance.createdAt,
       'isOpen': instance.isOpen,
       'transactionCaisses': instance.transactionCaisses,

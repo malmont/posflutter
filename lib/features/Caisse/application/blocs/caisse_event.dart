@@ -34,17 +34,33 @@ class OpenCaisse extends CaisseEvent {
 }
 
 class WithDrawCaisse extends CaisseEvent {
-  final double amount;
-  const WithDrawCaisse(this.amount);
+  final TransactionCaisseResponseModel transactionCaisseResponse;
+  const WithDrawCaisse(this.transactionCaisseResponse);
 
   @override
-  List<Object> get props => [amount];
+  List<Object> get props => [transactionCaisseResponse];
 }
 
 class DepositCaisse extends CaisseEvent {
-  final double amount;
-  const DepositCaisse(this.amount);
+  final TransactionCaisseResponseModel transactionCaisseResponse;
+  const DepositCaisse(this.transactionCaisseResponse);
 
   @override
-  List<Object> get props => [amount];
+  List<Object> get props => [transactionCaisseResponse];
+}
+
+class CashFundDepositCaisse extends CaisseEvent {
+  final TransactionCaisseResponseModel transactionCaisseResponse;
+  const CashFundDepositCaisse(this.transactionCaisseResponse);
+
+  @override
+  List<Object> get props => [transactionCaisseResponse];
+}
+
+class CashFundWithdrawCaisse extends CaisseEvent {
+  final TransactionCaisseResponseModel transactionCaisseResponse;
+  const CashFundWithdrawCaisse(this.transactionCaisseResponse);
+
+  @override
+  List<Object> get props => [transactionCaisseResponse];
 }
