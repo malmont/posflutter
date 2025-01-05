@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pos_flutter/features/Caisse/domain/entities/caisse.dart';
+import 'package:pos_flutter/features/Caisse/domain/entities/transaction_caisse.dart';
+import 'package:pos_flutter/features/Caisse/presentation/widgets/cash_details_page.dart';
+import 'package:pos_flutter/widget/detail_row.dart';
 
 import '../../../../design/design.dart';
 
-class CaisseDetailsPage extends StatelessWidget {
+class CaisseDetailsPage extends StatefulWidget {
   final Caisse caisseDetails;
   final VoidCallback onBack;
 
@@ -14,111 +17,116 @@ class CaisseDetailsPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colours.primary100,
-      appBar: AppBar(
-        backgroundColor: Colours.primary100,
-        title: Text(
-          'Détails de la Caisse',
-          style: TextStyles.interRegularH5
-              .copyWith(color: Colours.colorsButtonMenu),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: onBack,
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildCaisseInfo(),
-            const SizedBox(height: Units.sizedbox_20),
-            _buildTransactionList(),
-          ],
-        ),
-      ),
-    );
+  State<CaisseDetailsPage> createState() => _CaisseDetailsPageState();
+}
+
+class _CaisseDetailsPageState extends State<CaisseDetailsPage> {
+  TransactionCaisse? selectedTransaction;
+
+  void navigateToTransactionDetails(TransactionCaisse transaction) {
+    setState(() {
+      selectedTransaction = transaction;
+    });
   }
 
-  Widget _buildCaisseInfo() {
-    return Card(
-      color: Colours.primaryPalette,
-      elevation: 5,
-      margin: const EdgeInsets.symmetric(vertical: Units.edgeInsetsXLarge),
-      child: Padding(
-        padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'ID de la caisse : ${caisseDetails.id}',
-              style: TextStyles.interBoldH6
-                  .copyWith(color: Colours.colorsButtonMenu),
+  void goBackToTransactionList() {
+    setState(() {
+      selectedTransaction = null;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 7,
+          child: Scaffold(
+            backgroundColor: Colours.primary100,
+            appBar: AppBar(
+              backgroundColor: Colours.primary100,
+              title: Text(
+                'Transactions Caisse',
+                style: TextStyles.interRegularH5
+                    .copyWith(color: Colours.colorsButtonMenu),
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: widget.onBack,
+              ),
             ),
-            const SizedBox(height: Units.sizedbox_10),
-            Text(
-              'Montant total : \$${(caisseDetails.amountTotal / 100).toStringAsFixed(2)}',
-              style: TextStyles.interRegularBody1.copyWith(color: Colors.white),
-            ),
-            const SizedBox(height: Units.sizedbox_10),
-            Text(
-              'Date de création : ${caisseDetails.createdAt}',
-              style: TextStyles.interRegularBody1.copyWith(color: Colors.white),
-            ),
-            const SizedBox(height: Units.sizedbox_10),
-            Text(
-              'Statut : ${caisseDetails.isOpen ? "Ouverte" : "Fermée"}',
-              style: TextStyles.interRegularBody1.copyWith(
-                  color: caisseDetails.isOpen ? Colors.green : Colors.red),
-            ),
-          ],
+            body: selectedTransaction == null
+                ? _buildTransactionList()
+                : CashDetailsPage(
+                    transaction: selectedTransaction!,
+                    onBack: goBackToTransactionList,
+                  ),
+          ),
         ),
-      ),
+      ],
     );
   }
 
   Widget _buildTransactionList() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: caisseDetails.transactionCaisses.length,
-        itemBuilder: (context, index) {
-          final transaction = caisseDetails.transactionCaisses[index];
-          return Card(
+    return ListView.builder(
+      itemCount: widget.caisseDetails.transactionCaisses.length,
+      itemBuilder: (context, index) {
+        final transaction = widget.caisseDetails.transactionCaisses[index];
+        return GestureDetector(
+          onTap: () => navigateToTransactionDetails(transaction),
+          child: Card(
             color: Colours.primaryPalette,
             elevation: 3,
-            margin: const EdgeInsets.symmetric(vertical: Units.edgeInsetsLarge),
-            child: ListTile(
-              leading: Icon(
-                Icons.monetization_on,
-                color: transaction.amount > 0 ? Colors.green : Colors.red,
-              ),
-              title: Text(
-                'Montant : \$${(transaction.amount / 100).toStringAsFixed(2)}',
-                style: TextStyles.interBoldH6.copyWith(color: Colors.white),
-              ),
-              subtitle: Column(
+            margin: const EdgeInsets.symmetric(
+                vertical: Units.edgeInsetsLarge,
+                horizontal: Units.edgeInsetsLarge),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(Units.edgeInsetsLarge),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Date : ${transaction.transactionDate}',
-                    style: TextStyles.interRegularBody1
-                        .copyWith(color: Colours.colorsButtonMenu),
+                  Expanded(
+                    flex: 2,
+                    child: _buildDetailsRow(
+                      'Montant',
+                      '\$${(transaction.amount / 100).toStringAsFixed(2)}',
+                      transaction.amount > 0 ? Colors.green : Colors.red,
+                    ),
                   ),
-                  Text(
-                    'Type : ${transaction.transactionType}',
-                    style: TextStyles.interRegularBody1.copyWith(
-                      color: transaction.amount > 0 ? Colors.green : Colors.red,
+                  Expanded(
+                    flex: 2,
+                    child: _buildDetailsRow(
+                      'Date',
+                      transaction.transactionDate,
+                      Colours.colorsButtonMenu,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: _buildDetailsRow(
+                      'Type',
+                      transaction.transactionType,
+                      transaction.amount > 0 ? Colors.green : Colors.red,
                     ),
                   ),
                 ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailsRow(String label, String value, Color valueColor) {
+    return DetailsRow(
+      label: label,
+      value: value,
+      labelStyle: TextStyles.interRegularBody1.copyWith(color: Colors.white),
+      valueStyle: TextStyles.interRegularBody1.copyWith(color: valueColor),
     );
   }
 }

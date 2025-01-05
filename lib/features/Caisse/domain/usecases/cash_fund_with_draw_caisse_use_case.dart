@@ -6,14 +6,14 @@ import 'package:pos_flutter/features/Caisse/domain/repositories/caisse_repositor
 import 'package:pos_flutter/features/Caisse/infrastucture/models/transaction_caisse_response_model.dart';
 
 @lazySingleton
-class DepositCaisseUseCase
+class CashFundWithDrawCaisseUseCase
     implements UseCase<bool, TransactionCaisseResponseModel> {
   final CaisseRepository repository;
-  DepositCaisseUseCase(this.repository);
+  CashFundWithDrawCaisseUseCase(this.repository);
 
   @override
   Future<Either<Failure, bool>> call(
       TransactionCaisseResponseModel transactionCaisseResponse) async {
-    return await repository.depositCaisse(transactionCaisseResponse);
+    return await repository.cashFundWithdrawCaisse(transactionCaisseResponse);
   }
 }

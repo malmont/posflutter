@@ -64,11 +64,13 @@ dependencies:
   flutter_animate:
   animate_gradient:
   flutter_easyloading: ^3.0.5
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
   smooth_page_indicator: ^1.1.0
   fl_chart: ^0.69.0
   json_annotation: ^4.9.0
   intl: ^0.20.1
+  collection: ^1.17.0
+  sunmi_printer_plus: ^4.1.0
 
 dev_dependencies:
   flutter_test:

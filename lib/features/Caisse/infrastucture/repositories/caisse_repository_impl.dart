@@ -10,6 +10,7 @@ import 'package:pos_flutter/core/usecases/usecases.dart';
 import 'package:pos_flutter/core/utils/api_call_helper.dart';
 import 'package:pos_flutter/features/Caisse/domain/entities/caisse.dart';
 import 'package:pos_flutter/features/Caisse/domain/repositories/caisse_repository.dart';
+import 'package:pos_flutter/features/Caisse/infrastucture/models/transaction_caisse_response_model.dart';
 
 @LazySingleton(as: CaisseRepository)
 class CaisseRepositoryImpl implements CaisseRepository {
@@ -33,9 +34,18 @@ class CaisseRepositoryImpl implements CaisseRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> depositCaisse(double amount) async {
+  Future<Either<Failure, bool>> depositCaisse(
+      TransactionCaisseResponseModel transactionCaisseResponse) async {
     return await executeApiCall(() {
-      return remoteDataSource.depositCaisse(amount);
+      return remoteDataSource.depositCaisse(transactionCaisseResponse);
+    }, userLocalDataSource);
+  }
+
+  @override
+  Future<Either<Failure, bool>> cashFundDepositCaisse(
+      TransactionCaisseResponseModel transactionCaisseResponse) async {
+    return await executeApiCall(() {
+      return remoteDataSource.cashFundDeposit(transactionCaisseResponse);
     }, userLocalDataSource);
   }
 
@@ -56,9 +66,18 @@ class CaisseRepositoryImpl implements CaisseRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> withdrawCaisse(double amount) async {
+  Future<Either<Failure, bool>> withdrawCaisse(
+      TransactionCaisseResponseModel transactionCaisseResponse) async {
     return await executeApiCall(() {
-      return remoteDataSource.withdrawCaisse(amount);
+      return remoteDataSource.withdrawCaisse(transactionCaisseResponse);
+    }, userLocalDataSource);
+  }
+
+  @override
+  Future<Either<Failure, bool>> cashFundWithdrawCaisse(
+      TransactionCaisseResponseModel transactionCaisseResponse) async {
+    return await executeApiCall(() {
+      return remoteDataSource.cashFundWithdraw(transactionCaisseResponse);
     }, userLocalDataSource);
   }
 

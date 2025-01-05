@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:pos_flutter/features/Caisse/infrastucture/models/caisse_model.dart';
+import 'package:pos_flutter/features/Caisse/infrastucture/models/transaction_caisse_response_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'caisse_api_client.g.dart';
@@ -20,8 +21,18 @@ abstract class CaisseApiClient {
   Future<HttpResponse> closeCaisse();
 
   @POST('/caisse/withdraw')
-  Future<HttpResponse> withdrawCaisse(@Body() Map<String, dynamic> body);
+  Future<HttpResponse> withdrawCaisse(
+      @Body() TransactionCaisseResponseModel params);
 
   @POST('/caisse/deposit')
-  Future<HttpResponse> depositCaisse(@Body() Map<String, dynamic> body);
+  Future<HttpResponse> depositCaisse(
+      @Body() TransactionCaisseResponseModel params);
+
+  @POST('/caisse/cashfundwithdraw')
+  Future<HttpResponse> cashFundWithdraw(
+      @Body() TransactionCaisseResponseModel params);
+
+  @POST('/caisse/cashfunddeposit')
+  Future<HttpResponse> cashFundDeposit(
+      @Body() TransactionCaisseResponseModel params);
 }

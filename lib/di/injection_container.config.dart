@@ -66,6 +66,10 @@ import 'package:pos_flutter/features/Caisse/application/blocs/caisse_bloc.dart'
     as _i13;
 import 'package:pos_flutter/features/Caisse/domain/repositories/caisse_repository.dart'
     as _i402;
+import 'package:pos_flutter/features/Caisse/domain/usecases/cash_fund_deposit_caisse_use_case.dart'
+    as _i337;
+import 'package:pos_flutter/features/Caisse/domain/usecases/cash_fund_with_draw_caisse_use_case.dart'
+    as _i703;
 import 'package:pos_flutter/features/Caisse/domain/usecases/clear_local_caisse_use_case.dart'
     as _i712;
 import 'package:pos_flutter/features/Caisse/domain/usecases/close_caisse_use_case.dart'
@@ -350,6 +354,15 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i712.ClearLocalCaisseUseCase(gh<_i402.CaisseRepository>()));
     gh.lazySingleton<_i594.GetRemoteCaisseUseCase>(
         () => _i594.GetRemoteCaisseUseCase(gh<_i402.CaisseRepository>()));
+    gh.lazySingleton<_i703.CashFundWithDrawCaisseUseCase>(() =>
+        _i703.CashFundWithDrawCaisseUseCase(gh<_i402.CaisseRepository>()));
+    gh.lazySingleton<_i337.CashFundDepositCaisseUseCase>(
+        () => _i337.CashFundDepositCaisseUseCase(gh<_i402.CaisseRepository>()));
+    gh.factory<_i243.StatistiqueOrderBloc>(() => _i243.StatistiqueOrderBloc(
+          gh<_i966.GetRemoteStatistiqueOrderUseCase>(),
+          gh<_i684.GetCachedStatisticsOrderUseCase>(),
+          gh<_i224.ClearLocalStatisticsOrderUseCase>(),
+        ));
     gh.factory<_i13.CaisseBloc>(() => _i13.CaisseBloc(
           gh<_i594.GetRemoteCaisseUseCase>(),
           gh<_i525.GetCachedCaisseUseCase>(),
@@ -358,11 +371,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i925.OpenCaisseUseCase>(),
           gh<_i722.WithDrawCaisseUseCase>(),
           gh<_i951.DepositCaisseUseCase>(),
-        ));
-    gh.factory<_i243.StatistiqueOrderBloc>(() => _i243.StatistiqueOrderBloc(
-          gh<_i966.GetRemoteStatistiqueOrderUseCase>(),
-          gh<_i684.GetCachedStatisticsOrderUseCase>(),
-          gh<_i224.ClearLocalStatisticsOrderUseCase>(),
+          gh<_i337.CashFundDepositCaisseUseCase>(),
+          gh<_i703.CashFundWithDrawCaisseUseCase>(),
         ));
     gh.factory<_i20.OrderBloc>(() => _i20.OrderBloc(
           gh<_i555.GetRemoteOrdersUseCase>(),

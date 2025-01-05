@@ -1,8 +1,9 @@
 {
-    "dart.flutterSdkPath": "/Users/malmont/flutter/flutter",
-    "dart.env": {
-        "FLUTTER_ENV": "local"
-    },
-    "files.autoSave": "onFocusChange",
-    "editor.formatOnSave": true
+  "dart.flutterSdkPath": ".fvm/versions/3.27.1",
+  "dart.env": {
+    "FLUTTER_ENV": "local"
+  },
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": true,
+  "java.configuration.updateBuildConfiguration": "interactive"
 }
