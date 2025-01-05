@@ -13,13 +13,13 @@ List<OrderDetailsModel> orderDetailsModelListFromLocalJson(String str) {
     final jsonList = json.decode(str);
 
     // Affiche le contenu JSON décodé pour vérifier sa structure
-    print('Contenu JSON décodé : $jsonList');
+    // print('Contenu JSON décodé : $jsonList');
 
     if (jsonList is List) {
       return jsonList
           .where((element) {
             // Imprime chaque élément et son type pour débogage
-            print('Élément : $element, Type : ${element.runtimeType}');
+            // print('Élément : $element, Type : ${element.runtimeType}');
             return element is Map<String, dynamic>;
           })
           .map((x) => OrderDetailsModel.fromJson(x))

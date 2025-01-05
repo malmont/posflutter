@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pos_flutter/features/cart/application/blocs/cart_bloc.dart';
-import 'package:pos_flutter/features/cart/domain/entities/cart_item.dart';
 import 'package:pos_flutter/features/cart/presentation/pages/cart_view_page.dart';
 import 'package:pos_flutter/features/order/presentation/pages/order_checkout_view.dart';
 import 'package:pos_flutter/features/order/presentation/widgets/flip_card.dart';
@@ -14,8 +13,8 @@ class CartCheckoutFlipPage extends StatefulWidget {
 }
 
 class CartCheckoutFlipPageState extends State<CartCheckoutFlipPage> {
-  List<CartItem> cartItems = [];
   bool isCheckoutView = false;
+
   void _onOrderPlaced() {
     setState(() {
       isCheckoutView = false;
@@ -25,8 +24,9 @@ class CartCheckoutFlipPageState extends State<CartCheckoutFlipPage> {
     });
   }
 
-  void _onCheckoutPressed() {
-    if (cartItems.isNotEmpty) {
+  void _onCheckoutPressed(BuildContext context) {
+    final cartState = context.read<CartBloc>().state;
+    if (cartState.cart.isNotEmpty) {
       setState(() {
         isCheckoutView = true;
       });
@@ -39,29 +39,21 @@ class CartCheckoutFlipPageState extends State<CartCheckoutFlipPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CartBloc, CartState>(
-        listener: (context, state) {
-          if (state.cart.isEmpty) {
-            setState(() {
-              cartItems = [];
-            });
-          } else {
-            setState(() {
-              cartItems = state.cart;
-            });
-          }
-        },
-        child: Scaffold(
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        return Scaffold(
           body: FlipCard(
             isFront: !isCheckoutView,
             front: CartViewPage(
-              onCheckoutPressed: _onCheckoutPressed,
+              onCheckoutPressed: () => _onCheckoutPressed(context),
             ),
             back: OrderCheckoutView(
-              items: cartItems,
+              items: state.cart,
               onOrderPlaced: _onOrderPlaced,
             ),
           ),
-        ));
+        );
+      },
+    );
   }
 }
