@@ -110,7 +110,7 @@ void showTransactionDialog({
                                 height: 10,
                               ),
                               Text(
-                                ' \$${amountTotalCaisse.toStringAsFixed(2)}',
+                                ' \$${(amountTotalCaisse / 100).toStringAsFixed(2)}',
                                 style: TextStyles.interBoldBody2
                                     .copyWith(color: Colours.white),
                               ),
@@ -128,7 +128,7 @@ void showTransactionDialog({
                                 height: 10,
                               ),
                               Text(
-                                '\$${amountTotalCashFund.toStringAsFixed(2)}',
+                                '\$${(amountTotalCashFund / 100).toStringAsFixed(2)}',
                                 style: TextStyles.interBoldBody2
                                     .copyWith(color: Colours.white),
                               ),

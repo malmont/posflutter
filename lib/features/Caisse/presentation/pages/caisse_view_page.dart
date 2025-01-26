@@ -99,8 +99,12 @@ class _CaisseViewState extends State<CaisseView> {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is CaisseSuccess) {
                         EasyLoading.dismiss();
-                        openCaisse =
-                            state.caisses.firstWhere((caisse) => caisse.isOpen);
+
+                        if (state.caisses.isNotEmpty) {
+                          openCaisse = state.caisses
+                              .firstWhere((caisse) => caisse.isOpen);
+                        }
+
                         return CaisseListPage(
                           caisses: state.caisses,
                           onSelectCaisse: navigateToDetails,
@@ -136,7 +140,7 @@ class _CaisseViewState extends State<CaisseView> {
                         state.caisses.isNotEmpty) ||
                     state is CaisseMouvement) {
                   EasyLoading.dismiss();
-                  Caisse? openCaisse;
+                  // Caisse? openCaisse;
 
                   for (var caisse in state.caisses) {
                     if (caisse.isOpen) {
