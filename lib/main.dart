@@ -24,8 +24,7 @@ import 'features/payment/application/blocs/Payment_bloc/payment_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  const envFile =
-      String.fromEnvironment('ENV_FILE', defaultValue: ".env.local");
+  const envFile = String.fromEnvironment('ENV_FILE', defaultValue: ".env.prod");
   await dotenv.load(fileName: envFile);
 
   await configureDependencies();
