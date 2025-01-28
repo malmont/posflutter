@@ -7,12 +7,10 @@ List<MenuItemModel> menuItems = [
   MenuItemModel(icon: AppAssets.order, title: 'Order', index: 1),
   MenuItemModel(icon: AppAssets.caisse, title: 'Caisse', index: 2),
   MenuItemModel(icon: AppAssets.paiement, title: 'paiement', index: 3),
-  MenuItemModel(icon: AppAssets.notification, title: 'Notification', index: 4),
-  MenuItemModel(icon: AppAssets.sales, title: 'Sales', index: 5),
   MenuItemModel(
     icon: AppAssets.logout,
     title: 'Disconect',
-    index: 6,
+    index: 4,
   ),
 ];
 
