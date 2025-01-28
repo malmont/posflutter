@@ -24,8 +24,6 @@ class MainViewPage extends StatelessWidget {
       const OrderView(),
       const CaisseView(),
       const PaymentViewPage(),
-      const SeatingViewPage(),
-      const SeatingViewPage(),
     ];
 
     return BlocBuilder<SideMenuBloc, SideMenuState>(
@@ -78,7 +76,7 @@ class MainViewPage extends StatelessWidget {
                 flex: 10,
                 child: Builder(
                   builder: (context) {
-                    if (selectedMenu == 6) {
+                    if (selectedMenu == 4) {
                       context.read<AuthBloc>().add(SignOutEvent());
                       context
                           .read<SideMenuBloc>()

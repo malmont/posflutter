@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -102,7 +103,7 @@ class _CaisseViewState extends State<CaisseView> {
 
                         if (state.caisses.isNotEmpty) {
                           openCaisse = state.caisses
-                              .firstWhere((caisse) => caisse.isOpen);
+                              .firstWhereOrNull((caisse) => caisse.isOpen);
                         }
 
                         return CaisseListPage(
@@ -145,6 +146,8 @@ class _CaisseViewState extends State<CaisseView> {
                   for (var caisse in state.caisses) {
                     if (caisse.isOpen) {
                       openCaisse = caisse;
+                    } else {
+                      openCaisse = null;
                     }
                   }
 
@@ -153,7 +156,10 @@ class _CaisseViewState extends State<CaisseView> {
                     onOpenCaisse: () {
                       context.read<CaisseBloc>().add(const OpenCaisse());
 
-                      if (openCaisse?.amountTotal != 0) {
+                      if (openCaisse?.amountTotal != null &&
+                          double.parse((openCaisse!.amountTotal / 100)
+                                  .toStringAsFixed(2)) <=
+                              0) {
                         _showReplenishFundDialog(context).then((value) {
                           if (value == true) {
                             _handleTransaction(
@@ -166,7 +172,10 @@ class _CaisseViewState extends State<CaisseView> {
                       }
                     },
                     onCloseCaisse: () {
-                      if (openCaisse?.fondDeCaisse != 0) {
+                      if (openCaisse?.fondDeCaisse != null &&
+                          double.parse((openCaisse!.fondDeCaisse / 100)
+                                  .toStringAsFixed(2)) !=
+                              0) {
                         _showWithdrawFundDialog(context).then((value) {
                           if (value == true) {
                             _handleTransaction(
@@ -179,7 +188,10 @@ class _CaisseViewState extends State<CaisseView> {
                         return;
                       }
 
-                      if (openCaisse?.amountTotal != 0) {
+                      if (openCaisse?.amountTotal != null &&
+                          double.parse((openCaisse!.amountTotal / 100)
+                                  .toStringAsFixed(2)) !=
+                              0) {
                         _showWithdrawFundDialog(context).then((value) {
                           if (value == true) {
                             _handleTransaction(

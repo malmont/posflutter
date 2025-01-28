@@ -3,7 +3,7 @@ import 'package:pos_flutter/features/Caisse/domain/entities/caisse.dart';
 import 'package:intl/intl.dart';
 import '../../../../design/design.dart';
 
-class CaisseActionsPage extends StatelessWidget {
+class CaisseActionsPage extends StatefulWidget {
   final Caisse? caisseDetails;
   final VoidCallback onOpenCaisse;
   final VoidCallback onCloseCaisse;
@@ -22,6 +22,12 @@ class CaisseActionsPage extends StatelessWidget {
     required this.onCashFundWithdraw,
     required this.onCashFundDeposit,
   });
+
+  @override
+  State<CaisseActionsPage> createState() => _CaisseActionsPageState();
+}
+
+class _CaisseActionsPageState extends State<CaisseActionsPage> {
   String formaterDate(String dateString, {String format = 'yyyy-MM-dd'}) {
     try {
       DateTime date = DateTime.parse(dateString);
@@ -31,6 +37,13 @@ class CaisseActionsPage extends StatelessWidget {
       print('Erreur lors du formatage de la date : $e');
       return 'Date invalide';
     }
+  }
+
+  _isButtonActivated() {
+    setState(() {
+      widget.caisseDetails != null;
+    });
+    return widget.caisseDetails;
   }
 
   @override
@@ -59,39 +72,40 @@ class CaisseActionsPage extends StatelessWidget {
       margin: const EdgeInsets.all(Units.edgeInsetsXXLarge),
       child: Padding(
         padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
-        child: caisseDetails != null
+        child: widget.caisseDetails != null
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Caisse ouverte: ID ${caisseDetails!.id}',
+                    'Caisse ouverte: ID ${widget.caisseDetails!.id}',
                     style: TextStyles.interBoldH6
                         .copyWith(color: Colours.colorsButtonMenu),
                   ),
                   const SizedBox(height: Units.sizedbox_10),
                   Text(
-                    'Montant total : \$${(caisseDetails!.amountTotal / 100).toStringAsFixed(2)}',
+                    'Montant total : \$${double.parse((widget.caisseDetails!.amountTotal / 100).toStringAsFixed(2))}',
                     style: TextStyles.interRegularBody1
                         .copyWith(color: Colors.white),
                   ),
                   const SizedBox(height: Units.sizedbox_10),
                   Text(
-                    'Fond de caisse : \$${(caisseDetails!.fondDeCaisse / 100).toStringAsFixed(2)}',
+                    'Fond de caisse : \$${(widget.caisseDetails!.fondDeCaisse / 100).toStringAsFixed(2)}',
                     style: TextStyles.interRegularBody1
                         .copyWith(color: Colors.white),
                   ),
                   const SizedBox(height: Units.sizedbox_10),
                   Text(
-                    'Date de création : ${formaterDate(caisseDetails!.createdAt)}',
+                    'Date de création : ${formaterDate(widget.caisseDetails!.createdAt)}',
                     style: TextStyles.interRegularBody1
                         .copyWith(color: Colors.white),
                   ),
                   const SizedBox(height: Units.sizedbox_10),
                   Text(
-                    'Statut : ${caisseDetails!.isOpen ? "Ouverte" : "Fermée"}',
+                    'Statut : ${widget.caisseDetails!.isOpen ? "Ouverte" : "Fermée"}',
                     style: TextStyles.interBoldBody1.copyWith(
-                        color:
-                            caisseDetails!.isOpen ? Colors.green : Colors.red),
+                        color: widget.caisseDetails!.isOpen
+                            ? Colors.green
+                            : Colors.red),
                   ),
                 ],
               )
@@ -124,7 +138,8 @@ class CaisseActionsPage extends StatelessWidget {
                   type: ButtonType.cancelButton,
                   isSelected: isSelected,
                 ),
-                onPressed: caisseDetails == null ? onOpenCaisse : null,
+                onPressed:
+                    widget.caisseDetails == null ? widget.onOpenCaisse : null,
                 child: const Text('Ouvrir Caisse',
                     style: TextStyles.interBoldBody1),
               ),
@@ -137,7 +152,8 @@ class CaisseActionsPage extends StatelessWidget {
                   type: ButtonType.cancelButton,
                   isSelected: isSelected,
                 ),
-                onPressed: caisseDetails != null ? onCloseCaisse : null,
+                onPressed:
+                    widget.caisseDetails != null ? widget.onCloseCaisse : null,
                 child: const Text('Fermer Caisse',
                     style: TextStyles.interBoldBody1),
               ),
@@ -150,7 +166,8 @@ class CaisseActionsPage extends StatelessWidget {
                   type: ButtonType.cancelButton,
                   isSelected: isSelected,
                 ),
-                onPressed: caisseDetails != null ? onDeposit : null,
+                onPressed:
+                    widget.caisseDetails != null ? widget.onDeposit : null,
                 child: const Text('Dépôt', style: TextStyles.interBoldBody1),
               ),
             ),
@@ -162,7 +179,8 @@ class CaisseActionsPage extends StatelessWidget {
                   type: ButtonType.cancelButton,
                   isSelected: isSelected,
                 ),
-                onPressed: caisseDetails != null ? onWithdraw : null,
+                onPressed:
+                    widget.caisseDetails != null ? widget.onWithdraw : null,
                 child: const Text('Retrait', style: TextStyles.interBoldBody1),
               ),
             ),
@@ -174,7 +192,9 @@ class CaisseActionsPage extends StatelessWidget {
                   type: ButtonType.cancelButton,
                   isSelected: isSelected,
                 ),
-                onPressed: caisseDetails != null ? onCashFundDeposit : null,
+                onPressed: widget.caisseDetails != null
+                    ? widget.onCashFundDeposit
+                    : null,
                 child: const Text('Dépôt fond de caisse',
                     style: TextStyles.interBoldBody1),
               ),
@@ -187,7 +207,9 @@ class CaisseActionsPage extends StatelessWidget {
                   type: ButtonType.cancelButton,
                   isSelected: isSelected,
                 ),
-                onPressed: caisseDetails != null ? onCashFundWithdraw : null,
+                onPressed: widget.caisseDetails != null
+                    ? widget.onCashFundWithdraw
+                    : null,
                 child: const Text('Retrait fond de caisse',
                     style: TextStyles.interBoldBody1),
               ),
