@@ -150,6 +150,8 @@ import 'package:pos_flutter/features/payment/infrastucture/repositories/payment_
     as _i805;
 import 'package:pos_flutter/features/products/application/blocs/product_bloc.dart'
     as _i117;
+import 'package:pos_flutter/features/products/application/scannerblocs/scanner_bloc.dart'
+    as _i209;
 import 'package:pos_flutter/features/products/domain/repositories/product_repository.dart'
     as _i116;
 import 'package:pos_flutter/features/products/domain/usecases/get_product_usecase.dart'
@@ -334,6 +336,8 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i117.ProductBloc>(
         () => _i117.ProductBloc(gh<_i323.GetProductUseCase>()));
+    gh.factory<_i209.ScannerBloc>(
+        () => _i209.ScannerBloc(gh<_i323.GetProductUseCase>()));
     gh.factory<_i58.PaymentStatisticBlocBloc>(
         () => _i58.PaymentStatisticBlocBloc(
               gh<_i880.GetRemotePaymentStatisticUsecase>(),
