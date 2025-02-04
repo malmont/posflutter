@@ -4,8 +4,8 @@ import 'size.dart';
 
 class Variant extends Equatable {
   final int id;
-  final Color color;
-  final Size size;
+  final Color? color;
+  final Size? size;
   final int stockQuantity;
 
   const Variant({
@@ -18,8 +18,10 @@ class Variant extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       "id": id,
-      "color": (color as dynamic).toJson(), // assuming Color also has a toJson method
-      "size": (size as dynamic).toJson(), // assuming Size also has a toJson method
+      "color": (color as dynamic)
+          ?.toJson(), // assuming Color also has a toJson method
+      "size":
+          (size as dynamic)?.toJson(), // assuming Size also has a toJson method
       "stockQuantity": stockQuantity,
     };
   }

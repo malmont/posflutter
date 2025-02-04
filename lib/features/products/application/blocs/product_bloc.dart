@@ -144,8 +144,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         );
         final Variant selectedVariant = selectedProduct.variants.firstWhere(
           (variant) =>
-              variant.color.codeHexa == event.color && //
-              variant.size.name == event.size,
+              variant.color?.codeHexa == event.color && //
+              variant.size?.name == event.size,
           orElse: () => throw Exception(
               'Variant non trouvé pour la couleur et taille sélectionnées'),
         );

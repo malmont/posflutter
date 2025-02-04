@@ -342,22 +342,22 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.lazySingleton<_i951.DepositCaisseUseCase>(
         () => _i951.DepositCaisseUseCase(gh<_i402.CaisseRepository>()));
+    gh.lazySingleton<_i703.CashFundWithDrawCaisseUseCase>(() =>
+        _i703.CashFundWithDrawCaisseUseCase(gh<_i402.CaisseRepository>()));
     gh.lazySingleton<_i925.OpenCaisseUseCase>(
         () => _i925.OpenCaisseUseCase(gh<_i402.CaisseRepository>()));
     gh.lazySingleton<_i525.GetCachedCaisseUseCase>(
         () => _i525.GetCachedCaisseUseCase(gh<_i402.CaisseRepository>()));
     gh.lazySingleton<_i360.CloseCaisseUseCase>(
         () => _i360.CloseCaisseUseCase(gh<_i402.CaisseRepository>()));
+    gh.lazySingleton<_i337.CashFundDepositCaisseUseCase>(
+        () => _i337.CashFundDepositCaisseUseCase(gh<_i402.CaisseRepository>()));
     gh.lazySingleton<_i722.WithDrawCaisseUseCase>(
         () => _i722.WithDrawCaisseUseCase(gh<_i402.CaisseRepository>()));
     gh.lazySingleton<_i712.ClearLocalCaisseUseCase>(
         () => _i712.ClearLocalCaisseUseCase(gh<_i402.CaisseRepository>()));
     gh.lazySingleton<_i594.GetRemoteCaisseUseCase>(
         () => _i594.GetRemoteCaisseUseCase(gh<_i402.CaisseRepository>()));
-    gh.lazySingleton<_i703.CashFundWithDrawCaisseUseCase>(() =>
-        _i703.CashFundWithDrawCaisseUseCase(gh<_i402.CaisseRepository>()));
-    gh.lazySingleton<_i337.CashFundDepositCaisseUseCase>(
-        () => _i337.CashFundDepositCaisseUseCase(gh<_i402.CaisseRepository>()));
     gh.factory<_i243.StatistiqueOrderBloc>(() => _i243.StatistiqueOrderBloc(
           gh<_i966.GetRemoteStatistiqueOrderUseCase>(),
           gh<_i684.GetCachedStatisticsOrderUseCase>(),

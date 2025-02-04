@@ -8,8 +8,12 @@ part of 'variant_model.dart';
 
 VariantModel _$VariantModelFromJson(Map<String, dynamic> json) => VariantModel(
       id: (json['id'] as num).toInt(),
-      color: ColorModel.fromJson(json['color'] as Map<String, dynamic>),
-      size: SizeModel.fromJson(json['size'] as Map<String, dynamic>),
+      color: json['color'] == null
+          ? null
+          : ColorModel.fromJson(json['color'] as Map<String, dynamic>),
+      size: json['size'] == null
+          ? null
+          : SizeModel.fromJson(json['size'] as Map<String, dynamic>),
       stockQuantity: (json['stockQuantity'] as num).toInt(),
     );
 
@@ -17,6 +21,6 @@ Map<String, dynamic> _$VariantModelToJson(VariantModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'stockQuantity': instance.stockQuantity,
-      'color': instance.color.toJson(),
-      'size': instance.size.toJson(),
+      'color': instance.color?.toJson(),
+      'size': instance.size?.toJson(),
     };

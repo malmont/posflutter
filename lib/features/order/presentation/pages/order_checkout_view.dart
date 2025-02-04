@@ -212,70 +212,94 @@ class OrderCheckoutViewState extends State<OrderCheckoutView> {
                                                       children: [
                                                         Wrap(
                                                           children: [
-                                                            Container(
-                                                              padding: const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal: Units
-                                                                      .edgeInsetsMedium,
-                                                                  vertical: Units
-                                                                      .edgeInsetsSmall),
-                                                              margin: const EdgeInsets
-                                                                  .all(Units
-                                                                      .edgeInsetsMedium),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                border:
-                                                                    Border.all(
-                                                                  color: Colors
-                                                                      .black,
+                                                            if (product
+                                                                        .variant
+                                                                        .size
+                                                                        ?.name !=
+                                                                    null &&
+                                                                product
+                                                                    .variant
+                                                                    .size!
+                                                                    .name
+                                                                    .isNotEmpty)
+                                                              Container(
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        Units
+                                                                            .edgeInsetsMedium,
+                                                                    vertical: Units
+                                                                        .edgeInsetsSmall),
+                                                                margin: const EdgeInsets
+                                                                    .all(Units
+                                                                        .edgeInsetsMedium),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              Units.radiusXXLarge),
                                                                 ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            Units.radiusXXLarge),
-                                                              ),
-                                                              child: Text(
-                                                                product.variant
-                                                                    .size.name
-                                                                    .substring(
-                                                                        0, 1),
-                                                                style: TextStyles
-                                                                    .interRegularBody1
-                                                                    .copyWith(
-                                                                        color: Colours
-                                                                            .colorsButtonMenu),
-                                                              ),
-                                                            )
+                                                                child: Text(
+                                                                  product
+                                                                      .variant
+                                                                      .size!
+                                                                      .name
+                                                                      .substring(
+                                                                          0, 1),
+                                                                  style: TextStyles
+                                                                      .interRegularBody1
+                                                                      .copyWith(
+                                                                          color:
+                                                                              Colours.colorsButtonMenu),
+                                                                ),
+                                                              )
+                                                            else
+                                                              Container(),
                                                           ],
                                                         ),
                                                         Wrap(
                                                           children: [
-                                                            Container(
-                                                              margin: const EdgeInsets
-                                                                  .all(Units
-                                                                      .edgeInsetsMedium),
-                                                              width: Units.u20,
-                                                              height: Units.u20,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                color: Color(int.parse(
-                                                                        product
-                                                                            .variant
-                                                                            .color
-                                                                            .codeHexa
-                                                                            .replaceFirst('#',
-                                                                                ''),
-                                                                        radix:
-                                                                            16) +
-                                                                    0xFF000000),
-                                                                border: Border.all(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    width: 2),
-                                                              ),
-                                                            ),
+                                                            if (product
+                                                                    .variant
+                                                                    .color
+                                                                    ?.codeHexa !=
+                                                                null)
+                                                              Container(
+                                                                margin: const EdgeInsets
+                                                                    .all(Units
+                                                                        .edgeInsetsMedium),
+                                                                width:
+                                                                    Units.u20,
+                                                                height:
+                                                                    Units.u20,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  color: Color(int.parse(
+                                                                          product
+                                                                              .variant
+                                                                              .color!
+                                                                              .codeHexa
+                                                                              .replaceFirst('#',
+                                                                                  ''),
+                                                                          radix:
+                                                                              16) +
+                                                                      0xFF000000),
+                                                                  border: Border.all(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      width: 2),
+                                                                ),
+                                                              )
+                                                            else
+                                                              Container(),
                                                           ],
                                                         ),
                                                       ],

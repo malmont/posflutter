@@ -51,11 +51,16 @@ class _ProductDetailsViewPageState extends State<ProductDetailsViewPage> {
   @override
   Widget build(BuildContext context) {
     final uniqueColors = widget.product.variants
-        .map((variant) => variant.color.codeHexa)
+        .map((variant) =>
+            variant.color?.codeHexa ??
+            "#CCCCCC") // Valeur par défaut si color ou codeHexa est null
         .toSet()
         .toList();
+
     final uniqueSizes = widget.product.variants
-        .map((variant) => variant.size.name)
+        .map((variant) =>
+            variant.size?.name ??
+            "Aucune") // Valeur par défaut si size ou name est null
         .toSet()
         .toList();
 
@@ -126,19 +131,32 @@ class _ProductDetailsViewPageState extends State<ProductDetailsViewPage> {
                       ],
                     ),
                     const SizedBox(height: Units.sizedbox_10),
-                    VariantSelector(
-                      uniqueColors: uniqueColors,
-                      uniqueSizes: uniqueSizes,
-                      product: widget.product,
-                      productBloc: productBloc,
-                      selectedColor: selectedColor,
-                      selectedSize: selectedSize,
-                    ),
+                    (widget.product.variants.length == 1 &&
+                            (widget.product.variants.first.color == null &&
+                                widget.product.variants.first.size == null))
+                        ? SizedBox()
+                        : VariantSelector(
+                            uniqueColors: uniqueColors,
+                            uniqueSizes: uniqueSizes,
+                            product: widget.product,
+                            productBloc: productBloc,
+                            selectedColor: selectedColor,
+                            selectedSize: selectedSize,
+                          ),
                     const SizedBox(height: Units.sizedbox_8),
-                    if (selectedVariant != null)
-                      VariantInfo(selectedVariant: selectedVariant!)
-                    else
-                      const Text('Aucun variant sélectionné'),
+                    (widget.product.variants.length == 1 &&
+                            (widget.product.variants.first.color == null &&
+                                widget.product.variants.first.size == null))
+                        ? Center(
+                            child: Text(
+                              'Taille et couleur non disponibles',
+                              style: TextStyles.interRegularBody1
+                                  .copyWith(color: Colors.red),
+                            ),
+                          )
+                        : selectedVariant != null
+                            ? VariantInfo(selectedVariant: selectedVariant!)
+                            : const Text('Aucun variant sélectionné'),
                   ],
                 ),
               ),
@@ -152,17 +170,27 @@ class _ProductDetailsViewPageState extends State<ProductDetailsViewPage> {
         builder: (context, state) {
           Variant? selectedVariant =
               state is ProductLoaded ? state.selectedVariant : null;
-          bool isSelected = true;
+          Variant? variantToAdd = selectedVariant ??
+              (widget.product.variants.length == 1 &&
+                      widget.product.variants.first.color == null &&
+                      widget.product.variants.first.size == null
+                  ? Variant(
+                      id: widget.product.variants.first.id,
+                      color: null,
+                      size: null,
+                      stockQuantity:
+                          widget.product.variants.first.stockQuantity,
+                    )
+                  : null);
 
           return ProductDetailsBottomBar(
             product: widget.product,
             selectedVariant: selectedVariant,
-            onPressed: selectedVariant != null
+            onPressed: variantToAdd != null
                 ? () {
                     context.read<CartBloc>().add(AddProduct(
                         cartItem: CartItem(
-                            product: widget.product,
-                            variant: selectedVariant)));
+                            product: widget.product, variant: variantToAdd)));
 
                     context.read<ProductBloc>().add(const ResetVariantEvent());
                     // widget.onBack();

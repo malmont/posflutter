@@ -24,7 +24,7 @@ class VariantInfo extends StatelessWidget {
               ),
             ),
             Text(
-              ' ${selectedVariant.color.name}',
+              ' ${selectedVariant.color?.name ?? 'Aucune'}',
               style: TextStyles.interBoldBody1.copyWith(
                 color: Colours.colorsButtonMenu,
               ),
@@ -41,7 +41,7 @@ class VariantInfo extends StatelessWidget {
               ),
             ),
             Text(
-              selectedVariant.size.name,
+              selectedVariant.size?.name ?? 'Aucune',
               style: TextStyles.interBoldBody1.copyWith(
                 color: Colours.colorsButtonMenu,
               ),

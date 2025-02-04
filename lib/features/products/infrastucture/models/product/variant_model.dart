@@ -7,9 +7,8 @@ part 'variant_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class VariantModel extends Variant {
-  final ColorModel color;
-  final SizeModel size;
-
+  final ColorModel? color; // nullable
+  final SizeModel? size; // nullable
   const VariantModel({
     required super.id,
     required this.color,
@@ -31,8 +30,9 @@ class VariantModel extends Variant {
   // Méthode utilitaire pour convertir une entité Variant en VariantModel
   factory VariantModel.fromEntity(Variant entity) => VariantModel(
         id: entity.id,
-        color: ColorModel.fromEntity(entity.color),
-        size: SizeModel.fromEntity(entity.size),
+        color:
+            entity.color != null ? ColorModel.fromEntity(entity.color!) : null,
+        size: entity.size != null ? SizeModel.fromEntity(entity.size!) : null,
         stockQuantity: entity.stockQuantity,
       );
 }
