@@ -9,6 +9,7 @@ import 'package:pos_flutter/features/products/domain/entities/product/product.da
 import 'package:pos_flutter/features/products/presentation/pages/product_details_view_page.dart';
 import 'package:pos_flutter/features/products/presentation/widgets/alert_card.dart';
 import 'package:pos_flutter/features/products/presentation/widgets/article_card.dart';
+import 'package:pos_flutter/features/products/presentation/widgets/barcode_scan_listener.dart';
 import 'package:pos_flutter/features/products/presentation/widgets/generic_list.dart';
 import 'package:pos_flutter/features/products/presentation/widgets/header.dart';
 import 'package:provider/provider.dart';
@@ -108,16 +109,18 @@ class _ProductViewPageState extends State<ProductViewPage> {
         children: [
           Expanded(
             flex: 7,
-            child: Stack(
-              children: [
-                if (selectedProduct == null)
-                  _buildProductContent(context, categories),
-                if (selectedProduct != null)
-                  ProductDetailsViewPage(
-                    product: selectedProduct!,
-                    onBack: goBackToList,
-                  ),
-              ],
+            child: BarcodeScanListener(
+              child: Stack(
+                children: [
+                  if (selectedProduct == null)
+                    _buildProductContent(context, categories),
+                  if (selectedProduct != null)
+                    ProductDetailsViewPage(
+                      product: selectedProduct!,
+                      onBack: goBackToList,
+                    ),
+                ],
+              ),
             ),
           ),
           const Expanded(
