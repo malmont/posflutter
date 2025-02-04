@@ -101,22 +101,26 @@ class CartItemCard extends StatelessWidget {
                           const SizedBox(height: 10),
                           Wrap(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                margin: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colours.colorsButtonMenu,
+                              if (cartItem.variant?.size?.name != null &&
+                                  cartItem.variant!.size!.name!.isNotEmpty)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  margin: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colours.colorsButtonMenu,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  cartItem.variant.size.name.substring(0, 1),
-                                  style: TextStyles.interBoldBody1.copyWith(
-                                      color: Colours.colorsButtonMenu),
-                                ),
-                              )
+                                  child: Text(
+                                    cartItem.variant.size!.name.substring(0, 1),
+                                    style: TextStyles.interBoldBody1.copyWith(
+                                        color: Colours.colorsButtonMenu),
+                                  ),
+                                )
+                              else
+                                Container(),
                             ],
                           ),
                         ],
@@ -128,21 +132,24 @@ class CartItemCard extends StatelessWidget {
                           const SizedBox(height: 10),
                           Wrap(
                             children: [
-                              Container(
-                                margin: const EdgeInsets.all(4),
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(int.parse(
-                                          cartItem.variant.color.codeHexa
-                                              .replaceFirst('#', ''),
-                                          radix: 16) +
-                                      0xFF000000),
-                                  border:
-                                      Border.all(color: Colors.black, width: 2),
-                                ),
-                              ),
+                              if (cartItem.variant.color?.codeHexa != null)
+                                Container(
+                                  margin: const EdgeInsets.all(4),
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color(int.parse(
+                                            cartItem.variant.color!.codeHexa
+                                                .replaceFirst('#', ''),
+                                            radix: 16) +
+                                        0xFF000000),
+                                    border: Border.all(
+                                        color: Colors.black, width: 2),
+                                  ),
+                                )
+                              else
+                                Container(),
                             ],
                           ),
                         ],

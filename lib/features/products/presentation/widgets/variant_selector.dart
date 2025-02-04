@@ -40,16 +40,16 @@ class _VariantSelectorState extends State<VariantSelector> {
 
   List<String> getAvailableSizes(String color) {
     return widget.product.variants
-        .where((variant) => variant.color.codeHexa == color)
-        .map((variant) => variant.size.name)
+        .where((variant) => variant.color?.codeHexa == color)
+        .map((variant) => variant.size?.name ?? "Aucune")
         .toSet()
         .toList();
   }
 
   List<String> getAvailableColors(String size) {
     return widget.product.variants
-        .where((variant) => variant.size.name == size)
-        .map((variant) => variant.color.codeHexa)
+        .where((variant) => variant.size?.name == size)
+        .map((variant) => variant.color?.codeHexa ?? "#CCCCCC")
         .toSet()
         .toList();
   }
