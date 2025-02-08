@@ -27,6 +27,7 @@ class _ProductApiClient implements ProductApiClient {
     int page,
     int pageSize,
     String categories,
+    bool isPos,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -34,6 +35,7 @@ class _ProductApiClient implements ProductApiClient {
       r'page': page,
       r'pageSize': pageSize,
       r'categories': categories,
+      r'isPos': isPos,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

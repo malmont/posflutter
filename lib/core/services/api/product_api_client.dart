@@ -14,5 +14,6 @@ abstract class ProductApiClient {
     @Query('page') int page,
     @Query('pageSize') int pageSize,
     @Query('categories') String categories,
+    @Query('isPos') bool isPos,
   );
 }

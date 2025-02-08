@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pos_flutter/core/error/exeptions.dart';
 import 'package:pos_flutter/features/products/domain/entities/product/filter_product_params.dart';
@@ -25,14 +26,10 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         params.pageSize != null && params.pageSize! > 0 ? params.pageSize! : 12;
     final categoriesParam =
         jsonEncode(params.categories.map((e) => e.id).toList());
-
+    const bool isPos = true;
     try {
       var response = await apiClient.getProducts(
-        params.keyword ?? '',
-        page,
-        pageSize,
-        categoriesParam,
-      );
+          params.keyword ?? '', page, pageSize, categoriesParam, isPos);
       return response;
     } catch (e) {
       print('Erreur lors de la récupération des produits: $e');
