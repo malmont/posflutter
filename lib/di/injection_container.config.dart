@@ -334,10 +334,10 @@ extension GetItInjectableX on _i174.GetIt {
           localDataSource: gh<_i381.UserLocalDataSource>(),
           signOutUseCase: gh<_i360.SignOutUseCase>(),
         ));
-    gh.factory<_i117.ProductBloc>(
-        () => _i117.ProductBloc(gh<_i323.GetProductUseCase>()));
     gh.factory<_i209.ScannerBloc>(
         () => _i209.ScannerBloc(gh<_i323.GetProductUseCase>()));
+    gh.factory<_i117.ProductBloc>(
+        () => _i117.ProductBloc(gh<_i323.GetProductUseCase>()));
     gh.factory<_i58.PaymentStatisticBlocBloc>(
         () => _i58.PaymentStatisticBlocBloc(
               gh<_i880.GetRemotePaymentStatisticUsecase>(),
