@@ -35,11 +35,18 @@ class AuthenticationResponseModel {
     final email = decodedPayload['email'] as String? ?? '';
     final id = decodedPayload['id']?.toString() ?? '';
 
+    // Récupérer le tableau des rôles depuis le payload
+    final rolesList = (decodedPayload['roles'] as List<dynamic>?)
+            ?.map((role) => role.toString())
+            .toList() ??
+        [];
+
     return UserModel.fromJson({
       "firstName": firstName,
       "lastName": lastName,
       "email": email,
       "id": id,
+      "roles": rolesList, // Ajout des rôles dans le JSON
     });
   }
 
@@ -71,7 +78,7 @@ class AuthenticationResponseModel {
         output += '=';
         break;
       default:
-        throw Exception('Illegal base64url string!"');
+        throw Exception('Illegal base64url string!');
     }
     return utf8.decode(base64Url.decode(output));
   }

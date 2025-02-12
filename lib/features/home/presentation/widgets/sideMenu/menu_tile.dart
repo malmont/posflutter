@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pos_flutter/features/home/application/blocs/side_menu_bloc.dart';
 import 'package:pos_flutter/features/home/infrastucture/models/menu_item.dart';
-
 import '../../../../../design/design.dart';
 
 class MenuTile extends StatelessWidget {
   final MenuItemModel menu;
+  final bool disabled; // Ajout du paramètre disabled
 
-  const MenuTile({super.key, required this.menu});
+  const MenuTile({Key? key, required this.menu, this.disabled = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +27,34 @@ class MenuTile extends StatelessWidget {
               bottom: Units.edgeInsetsSmall,
             ),
             selected: menu.index == selectedMenu,
-            onTap: () {
-              context.read<SideMenuBloc>().add(SelectMenuItemEvent(menu.index));
-            },
-            selectedTileColor: Colours.colorsButtonMenu,
+            // Si l'item est disabled, on ne lui assigne pas d'action
+            onTap: disabled
+                ? null
+                : () {
+                    context
+                        .read<SideMenuBloc>()
+                        .add(SelectMenuItemEvent(menu.index));
+                  },
+            // Couleur différente pour un tile désactivé (par exemple, gris clair)
+            selectedTileColor:
+                disabled ? Colors.grey[300] : Colours.colorsButtonMenu,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(Units.radiusXXXXXLarge),
             ),
             leading: Padding(
               padding: EdgeInsets.only(
-                  left: isCollapsed
-                      ? Units.edgeInsetsXXXLarge
-                      : Units.edgeInsetsLarge),
+                left: isCollapsed
+                    ? Units.edgeInsetsXXXLarge
+                    : Units.edgeInsetsLarge,
+              ),
               child: SvgPicture.asset(
                 menu.icon,
-                color: menu.index == selectedMenu
-                    ? Colours.white
-                    : Colours.colorsButtonMenu,
+                // Si disabled, on affiche l'icône en gris
+                color: disabled
+                    ? Colors.grey
+                    : (menu.index == selectedMenu
+                        ? Colours.white
+                        : Colours.colorsButtonMenu),
               ),
             ),
             title: isCollapsed
@@ -52,7 +64,11 @@ class MenuTile extends StatelessWidget {
                     overflow: TextOverflow.fade,
                     maxLines: 1,
                     softWrap: false,
-                    style: TextStyles.interRegularTiny,
+                    // Appliquer un style grisé si disabled
+                    style: disabled
+                        ? TextStyles.interRegularTiny
+                            .copyWith(color: Colors.grey)
+                        : TextStyles.interRegularTiny,
                   ),
           ),
         );
