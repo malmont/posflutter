@@ -29,6 +29,8 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     try {
       if (kIsWeb) {
         params = params.copyWith(platform: 'web');
+      } else {
+        params = params.copyWith(platform: 'pos');
       }
       final response = await apiClient.signIn(params);
       return response;
