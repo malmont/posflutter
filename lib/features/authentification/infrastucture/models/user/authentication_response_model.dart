@@ -35,18 +35,22 @@ class AuthenticationResponseModel {
     final email = decodedPayload['email'] as String? ?? '';
     final id = decodedPayload['id']?.toString() ?? '';
 
-    // Récupérer le tableau des rôles depuis le payload
-    final rolesList = (decodedPayload['roles'] as List<dynamic>?)
-            ?.map((role) => role.toString())
-            .toList() ??
-        [];
+    // Gestion correcte du format des rôles
+    final rolesRaw = decodedPayload['roles'];
+    List<String> rolesList = [];
+
+    if (rolesRaw is List) {
+      rolesList = rolesRaw.map((role) => role.toString()).toList();
+    } else if (rolesRaw is Map<String, dynamic>) {
+      rolesList = rolesRaw.values.map((role) => role.toString()).toList();
+    }
 
     return UserModel.fromJson({
       "firstName": firstName,
       "lastName": lastName,
       "email": email,
       "id": id,
-      "roles": rolesList, // Ajout des rôles dans le JSON
+      "roles": rolesList, // Correction des rôles
     });
   }
 
